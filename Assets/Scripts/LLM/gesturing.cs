@@ -49,7 +49,7 @@ public class BodyMove : MonoBehaviour
             }
         };
 
-        StartCoroutine(PostRequest());
+        // StartCoroutine(PostRequest());
     }
 
     public void PlayerResponds(string playerMessage)

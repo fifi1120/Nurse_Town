@@ -1116,6 +1116,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c4f8acc2aa0d4b548a47cd6adb669a05, type: 3}
       insertIndex: -1
       addedObject: {fileID: 965688748}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c4f8acc2aa0d4b548a47cd6adb669a05, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 965688751}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c4f8acc2aa0d4b548a47cd6adb669a05, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 965688752}
   m_SourcePrefab: {fileID: 100100000, guid: c4f8acc2aa0d4b548a47cd6adb669a05, type: 3}
 --- !u!1001 &791535431
 PrefabInstance:
@@ -1738,6 +1744,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   promptMessage: 111
   patient: {fileID: 965688745}
+--- !u!114 &965688751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 965688745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d868d52bed1a2c42a34e7d3178d98df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &965688752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 965688745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37c844a53830247438090499e63f14a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1120216860
 GameObject:
   m_ObjectHideFlags: 0
