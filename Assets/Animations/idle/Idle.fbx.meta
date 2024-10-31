@@ -1,49 +1,9 @@
 fileFormatVersion: 2
-guid: c4f8acc2aa0d4b548a47cd6adb669a05
+guid: 552d8ccba989a2a49a54345560d5e607
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Ch41_body
-    second: {fileID: 2100000, guid: 95cb58cc4b07c294abf710b4c3dfe6a6, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Ch41_hair
-    second: {fileID: 2100000, guid: 306b70764c1ac86498decf993c8645f0, type: 2}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: Ch41_1001_Diffuse
-    second: {fileID: 2800000, guid: 6ea661e8c39c5aa4faf55d207d2ed9b6, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: Ch41_1001_Glossiness
-    second: {fileID: 2800000, guid: 9bce8ebaee56d024aac1428c592e2122, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: Ch41_1001_Normal
-    second: {fileID: 2800000, guid: ca8ecfaff7b31ef4bbe40232fead6418, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: Ch41_1001_Specular
-    second: {fileID: 2800000, guid: fbeed1256a4dab24c9d6d049420cbd70, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: Ch41_1002_Diffuse
-    second: {fileID: 2800000, guid: 0d42e55b183ee5149b5a8c61e6fdf617, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: Ch41_1002_Normal
-    second: {fileID: 2800000, guid: 085e5645ea3c4ef4b80f3bcc527a8b65, type: 3}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -73,18 +33,18 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Sitting
+      name: mixamo.com
       takeName: mixamo.com
       internalID: -203655887218126122
       firstFrame: 0
-      lastFrame: 178
+      lastFrame: 399
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
