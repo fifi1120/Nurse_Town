@@ -13,3 +13,8 @@ How to run the project:
 6. Go to Hierarchy, click on "Patient", in the Inspector, click on "Add Component", search for "PatientSpeech", and add it.
 7. The game should start. You can see the conversation from Patient NPC from the console.
 
+Testing the Text-to-Speech System:
+
+1. Go to Assets/Doctor's office/Scripts/TTS/TTSManager.cs, and change the value of openAIApiKey to our secret OpenAI API key.
+2. Open the TTS-Test Scene in the Scenes folder.
+3. Click Play and enter any text in the input field. Hit enter and the speech should play.
