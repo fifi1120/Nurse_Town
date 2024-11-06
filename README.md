@@ -17,4 +17,10 @@ Testing the Text-to-Speech System:
 
 1. Go to Assets/Doctor's office/Scripts/TTS/TTSManager.cs, and change the value of openAIApiKey to our secret OpenAI API key.
 2. Open the TTS-Test Scene in the Scenes folder.
-3. Click Play and enter any text in the input field. Hit enter and the speech should play.
+3. Click Play and enter any text in the input field. Hit enter and the speech should play. With lip sync, The character should have matching mouth movement.
+
+Lip Sync:
+
+Tool: uLipSync - open source Unity plugin for lip sync. Github link: https://github.com/hecomi/uLipSync
+
+Tutorial: https://www.youtube.com/watch?v=k5CtTsIKwE4
