@@ -15,7 +15,7 @@ public class TTSManager : MonoBehaviour
     public AudioSource audioSource;
 
     // Can load this securely from PlayerPrefs or another secure location
-    private static readonly string openAIApiKey = "API_KEY";
+    private static readonly string openAIApiKey = "api_key";
     private static readonly string ttsEndpoint = "https://api.openai.com/v1/audio/speech";
     private const bool deleteCachedFile = true;
 
@@ -29,7 +29,7 @@ public class TTSManager : MonoBehaviour
         string text = userInput.text;
         if (string.IsNullOrEmpty(text)) return;
 
-        byte[] audioData = await GetTTSAudio(text, "tts-1", "alloy", "mp3", 1.0f);
+        byte[] audioData = await GetTTSAudio(text, "tts-1", "nova", "mp3", 1.0f);
         if (audioData != null)
         {
             ProcessAudioBytes(audioData);
