@@ -8,12 +8,12 @@ using Newtonsoft.Json.Linq;
 public class OpenAIRequest : MonoBehaviour
 {
     private string apiUrl = "https://api.openai.com/v1/chat/completions";
-    private string apiKey = "XXX"; // TODO: replace with the true OpenAI API key
-
+    private string apiKey;
     private List<Dictionary<string, string>> chatMessages;  // to store the conversation history
 
     void Start()
     {
+        apiKey = EnvironmentLoader.GetEnvVariable("OPENAI_API_KEY");
         Debug.Log("Script started. Starting initial conversation...");
 
         // To start, making the model say “I'm feeling not well”

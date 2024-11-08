@@ -7,7 +7,15 @@ using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using TMPro;
-using Newtonsoft.Json; // Add Newtonsoft.Json for JSON serialization
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Networking;
+using System.Text;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Text.RegularExpressions;
+
 
 public class TTSManager : MonoBehaviour
 {
@@ -15,12 +23,15 @@ public class TTSManager : MonoBehaviour
     public AudioSource audioSource;
 
     // Can load this securely from PlayerPrefs or another secure location
-    private static readonly string openAIApiKey = "api_key";
+    private string openAIApiKey;
     private static readonly string ttsEndpoint = "https://api.openai.com/v1/audio/speech";
     private const bool deleteCachedFile = true;
 
     public void Start()
     {
+        openAIApiKey = EnvironmentLoader.GetEnvVariable("OPENAI_API_KEY");
+        Debug.Log("OpenAI API Key: " + openAIApiKey);
+
         userInput.onEndEdit.AddListener(delegate { if (Input.GetKeyDown(KeyCode.Return)) ConvertTextToSpeech(); });
     }
 

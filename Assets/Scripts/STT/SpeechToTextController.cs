@@ -12,7 +12,14 @@ public class SpeechToTextController : MonoBehaviour
     private AudioClip recordedClip;
 
     // Set your OpenAI API Key here
-    private readonly string openAiApiKey = "YOUR_OPENAI_API_KEY";
+    private string openAiApiKey;
+
+    void Start()
+    {
+        openAiApiKey = EnvironmentLoader.GetEnvVariable("OPENAI_API_KEY");
+        Debug.Log("APIKey:" + openAiApiKey);
+        
+    }
 
     void Update()
     {
