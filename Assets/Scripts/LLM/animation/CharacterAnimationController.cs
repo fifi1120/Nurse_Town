@@ -24,12 +24,14 @@ public class CharacterAnimationController : MonoBehaviour
 
     public void PlayHeadPain()
     {
-        UpdateAnimationState(1);
+        // UpdateAnimationState(1);
+        animator.SetTrigger("pain");
+
     }
 
     public void PlayHappy()
     {
-        UpdateAnimationState(2);
+        animator.SetTrigger("happy");
     }
 
 }

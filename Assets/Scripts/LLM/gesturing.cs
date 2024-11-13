@@ -34,20 +34,28 @@ public class BodyMove : MonoBehaviour
             "You are a patient NPC in a hospital, interacting with a nursing student. " +
             "Respond with brief, natural answers about your symptoms or feelings. " +
             "Keep responses concise and focused on your condition.";
+        string scenario = 
+            "Background\n" +
+            "you are Mrs. Johnson, a 62-year-old female who was admitted to the hospital with severeheadache and dizziness.\n" +
+            "She has a 5-year history of hypertension and has been on antihypertensive medications.though she occasionally misses doses due to forgetfulness.\n" +
+            "Family history includes hypertension and heart disease (mother and brother)\n" +
+            "She works as a school teacher and lives with her husband.\n" +
+            "She has a sedentary lifestyle and enjoys watching TV in her spare time\n" +
+            "Tone and Personality\n" +
+            "Speak with a polite and cooperative tone, as Mrs. Johnson is generally compliant and\n" +
+            "concerned about her health.\n" +
+            "Express some mild anxiety about her current symptoms, as the headache and dizzinessare more severe than what she usually experiences.\n" +
+            "Occasionally show a bit of forgetfuiness or hesitation when recaling specific medicationdetails, indicating a realistic portrayal of a patient who isn't fully adherent to herprescribed regimen.";
 
         chatMessages = new List<Dictionary<string, string>>
         {
             new Dictionary<string, string>
             {
                 { "role", "system" },
-                { "content", $"{baseInstructions}\n\n{emotionInstructions}" }
+                { "content", $"{baseInstructions}\n\n{emotionInstructions}\n\n{scenario}" }
             },
-            new Dictionary<string, string>
-            {
-                { "role", "assistant" },
-                { "content", "Hi, nurse, I am feeling pain in my chest[1]" }
-            }
         };
+        
         PrintChatMessage(chatMessages);
     }
 
@@ -114,6 +122,7 @@ public class BodyMove : MonoBehaviour
                     break;
                 case 1:
                     animationController.PlayHeadPain();
+                    Debug.Log("changing to pain");
                     break;
                 case 2:
                     animationController.PlayHappy();
