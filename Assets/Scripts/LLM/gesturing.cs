@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 
 public class BodyMove : MonoBehaviour
 {
-    private string apiUrl = "https://api.openai.com/v1/chat/completions";
+    private string chatApiUrl = "https://api.openai.com/v1/chat/completions";
     private string apiKey;
     private List<Dictionary<string, string>> chatMessages;
     private CharacterAnimationController animationController;
@@ -17,55 +17,88 @@ public class BodyMove : MonoBehaviour
     void Start()
     {
         apiKey = EnvironmentLoader.GetEnvVariable("OPENAI_API_KEY");
-        animationController = GetComponent<CharacterAnimationController>();
         Debug.Log("APIKey:" + apiKey);
-        Debug.Log("Script started. Starting initial conversation...");
-        
-        // 0 -> idle
-        // 1 -> head pain
-        // 2 -> happy
+        animationController = GetComponent<CharacterAnimationController>();
+        InitializeChat();
+    }
+
+    private void InitializeChat()
+    {
         string emotionInstructions = 
             "IMPORTANT: You must end EVERY response with one of these emotion codes: [0], [1], or [2]\n" +
             "- Use [0] for neutral responses or statements\n" +
             "- Use [1] for responses involving pain, discomfort, symptoms, or negative feelings\n" +
-            "- Use [2] for positive responses, gratitude, or when feeling better\n\n" +
-            "Examples:\n" +
-            "- If describing symptoms: 'My chest feels very tight[1]'\n" +
-            "- If expressing gratitude: 'Thank you for helping me[2]'\n" +
-            "- If making a neutral statement: 'I've been here since morning[0]'\n\n";
+            "- Use [2] for positive responses, gratitude, or when feeling better\n";
 
         string baseInstructions = 
-            "You are strictly playing the role of a patient NPC in a hospital. " +
-            "You will be interacting with a user, who is a nursing student. " +
-            "As a patient NPC, you are not allowed to ask any questions or provide any assistance. " +
-            "You must respond with short answers that describe your symptoms or feelings based on the player's input.\n\n";
+            "You are a patient NPC in a hospital, interacting with a nursing student. " +
+            "Respond with brief, natural answers about your symptoms or feelings. " +
+            "Keep responses concise and focused on your condition.";
 
         chatMessages = new List<Dictionary<string, string>>
         {
             new Dictionary<string, string>
             {
                 { "role", "system" },
-                { "content", baseInstructions + emotionInstructions + "Start by saying: 'Hi, nurse, I am feeling pain in my chest[1]'" }
+                { "content", $"{baseInstructions}\n\n{emotionInstructions}" }
             },
             new Dictionary<string, string>
             {
                 { "role", "assistant" },
                 { "content", "Hi, nurse, I am feeling pain in my chest[1]" }
-            },
-            new Dictionary<string, string>
-            {
-                { "role", "user" },
-                { "content", "From level 1 to 10, how would you rate your pain?" }
             }
         };
-
-        StartCoroutine(PostRequest());
+        PrintChatMessage(chatMessages);
     }
 
     public void PlayerResponds(string playerMessage)
     {
         chatMessages.Add(new Dictionary<string, string>() { { "role", "user" }, { "content", playerMessage } });
-        StartCoroutine(PostRequest());
+        StartCoroutine(SendChatRequest());
+        PrintChatMessage(chatMessages);
+        
+    }
+
+    private IEnumerator SendChatRequest()
+    {
+        var requestObject = new
+        {
+            model = "gpt-4",
+            messages = chatMessages,
+            max_tokens = 150,
+            temperature = 0.7f
+        };
+
+        string requestBody = JsonConvert.SerializeObject(requestObject);
+        
+        using (UnityWebRequest request = new UnityWebRequest(chatApiUrl, "POST"))
+        {
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(requestBody);
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+            request.SetRequestHeader("Authorization", $"Bearer {apiKey}");
+
+            yield return request.SendWebRequest();
+            
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                var jsonResponse = JObject.Parse(request.downloadHandler.text);
+                var messageContent = jsonResponse["choices"][0]["message"]["content"].ToString();
+                
+                UpdateAnimation(messageContent);
+                chatMessages.Add(new Dictionary<string, string>() 
+                { 
+                    { "role", "assistant" }, 
+                    { "content", messageContent } 
+                });
+                PrintChatMessage(chatMessages);
+            }
+            else
+            {
+                Debug.LogError($"Chat API Error: {request.error}");
+            }
+        }
     }
 
     private void UpdateAnimation(string message)
@@ -73,82 +106,46 @@ public class BodyMove : MonoBehaviour
         Match match = Regex.Match(message, @"\[([012])\]$");
         if (match.Success)
         {
-            // int emotionCode = int.Parse(match.Groups[1].Value);
-            int emotionCode = 1;
-            Debug.Log("Emotion code set to " + emotionCode);
+            int emotionCode = int.Parse(match.Groups[1].Value);
             switch(emotionCode)
             {
-                case 0: // neutral
+                case 0:
                     animationController.PlayIdle();
                     break;
-                case 1: // pain
+                case 1:
                     animationController.PlayHeadPain();
                     break;
-                case 2: // happy
+                case 2:
                     animationController.PlayHappy();
                     break;
             }
         }
         else
         {
-            Debug.LogWarning("No valid emotion code found in message: " + message);
+            Debug.LogWarning($"No emotion code found: {message}");
             animationController.PlayIdle();
         }
     }
-
-    IEnumerator PostRequest()
-    {
-        Debug.Log("Building request body for chat completion...");
-
-        var requestObject = new
+    public static void PrintChatMessage(List<Dictionary<string, string>> messages)
         {
-            model = "gpt-4o-mini",  
-            messages = chatMessages,
-            max_tokens = 100
-        };
-
-        string requestBody = JsonConvert.SerializeObject(requestObject);
-        Debug.Log("Request Body: " + requestBody);
-
-        var request = new UnityWebRequest(apiUrl, "POST");
-        byte[] bodyRaw = Encoding.UTF8.GetBytes(requestBody);
-        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-        request.downloadHandler = new DownloadHandlerBuffer();
-
-        request.SetRequestHeader("Content-Type", "application/json");
-        request.SetRequestHeader("Authorization", "Bearer " + apiKey);
-
-        yield return request.SendWebRequest();
-
-        Debug.Log("Request completed. Status Code: " + request.responseCode);
-
-        if (request.result == UnityWebRequest.Result.ConnectionError || 
-            request.result == UnityWebRequest.Result.ProtocolError)
+        Debug.Log("══════════════ Chat Messages Log ══════════════");
+        
+        foreach (var message in messages)
         {
-            Debug.LogError("Error: " + request.error);
-            Debug.LogError("Response Body: " + request.downloadHandler.text);
-        }
-        else if (request.responseCode == 200)
-        {
-            Debug.Log("Response received: " + request.downloadHandler.text);
+            string role = message["role"];
+            string content = message["content"];
             
-            var jsonResponse = JObject.Parse(request.downloadHandler.text);
-            var messageContent = jsonResponse["choices"][0]["message"]["content"].ToString();
-            Debug.Log("AI (Patient) response: " + messageContent);
-
-            // Update animation 
-            UpdateAnimation(messageContent);
-
-            chatMessages.Add(new Dictionary<string, string>() 
-            { 
-                { "role", "assistant" }, 
-                { "content", messageContent } 
-            });
+            // Extract emotion code if present
+            string emotionCode = "";
+            var match = System.Text.RegularExpressions.Regex.Match(content, @"\[([012])\]$");
+            if (match.Success)
+            {
+                emotionCode = $" (Emotion: {match.Groups[1].Value})";
+            }
+            
+            Debug.Log($"[{role.ToUpper()}]{emotionCode}\n{content}\n");
         }
-        else
-        {
-            Debug.LogWarning("Request completed with response code: " + request.responseCode);
-            Debug.LogWarning("Response Body: " + request.downloadHandler.text);
-        }
+        
+        Debug.Log("══════════════ End Chat Log ══════════════");
     }
 }
