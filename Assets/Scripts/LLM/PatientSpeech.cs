@@ -5,10 +5,13 @@ using UnityEngine.Networking;
 using System.Text;
 using Newtonsoft.Json.Linq;
 using System;
+using System.IO;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 public class OpenAIRequest : MonoBehaviour
 {
-    public static OpenAIRequest Instance;  
+    public static OpenAIRequest Instance; // Singleton instance
 
     private string apiUrl = "https://api.openai.com/v1/chat/completions";
     private string apiKey;
@@ -17,16 +20,31 @@ public class OpenAIRequest : MonoBehaviour
 
     void Awake()
     {
-        Instance = this; 
-
+        if (Instance == null)
+        {
+            Instance = this;
+            // If you need to maintain this during scene transitions, please uncomment the following line.
+            // DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     void Start()
     {
         apiKey = EnvironmentLoader.GetEnvVariable("OPENAI_API_KEY");
-        Debug.Log("In awake here we are using APIKey:" + apiKey);
+        Debug.Log("Using APIKey:" + apiKey);
+        // Initialize chat with Mrs. Johnson's background
+        InitializeChat();
+    }
+
+
+    private void InitializeChat()
+    {
         string rolePlayingInstructions = @"
-You are strictly playing the role of Mrs. Johnson.
+You are strictly playing the role of Mrs. Johnson. 
 
 Background:
 - Mrs. Johnson is a 62-year-old female who was admitted to the hospital with severe headache and dizziness.
@@ -51,9 +69,9 @@ Emotional Response:
 - Display some concern when discussing the family history of heart disease, but reassure the nurse that you usually don’t experience symptoms like this.
 - When the nurse suggests lifestyle changes or medication adherence strategies, be open but express some hesitation regarding making drastic changes to your routine.
 
-As Mrs. Johnson, please initiate the conversation by greeting the nurse and mentioning how you're feeling.
+As Mrs. Johnson, please initiate the conversation by greeting the nurse and mentioning how you're feeling. Please try to be concise.
 ";
-        
+
         chatMessages = new List<Dictionary<string, string>>()
         {
             new Dictionary<string, string>()
@@ -66,7 +84,7 @@ As Mrs. Johnson, please initiate the conversation by greeting the nurse and ment
         StartCoroutine(PostRequest());
     }
 
-    public void ReceiveNurseTranscription(string transcribedText) // integrate with STT 11/13
+    public void ReceiveNurseTranscription(string transcribedText)
     {
         NurseResponds(transcribedText);
     }
@@ -78,28 +96,13 @@ As Mrs. Johnson, please initiate the conversation by greeting the nurse and ment
         StartCoroutine(PostRequest());
     }
 
+
     IEnumerator PostRequest()
     {
         Debug.Log("Building request body for chat completion...");
 
-        string requestBody = "{\"model\": \"gpt-4\", \"messages\": [";
-        foreach (var message in chatMessages)
-        {
-            string contentEscaped = message["content"]
-                .Replace("\\", "\\\\")
-                .Replace("\"", "\\\"")
-                .Replace("\n", "\\n")
-                .Replace("\r", "\\r");
-            requestBody += "{\"role\": \"" + message["role"] + "\", \"content\": \"" + contentEscaped + "\"},";
-        }
-        requestBody = requestBody.TrimEnd(',') + "]}"; 
-
-        var request = new UnityWebRequest(apiUrl, "POST");
-        byte[] bodyRaw = Encoding.UTF8.GetBytes(requestBody);
-        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-        request.downloadHandler = new DownloadHandlerBuffer();
-        request.SetRequestHeader("Content-Type", "application/json");
-        request.SetRequestHeader("Authorization", "Bearer " + apiKey);
+        string requestBody = BuildRequestBody();
+        var request = CreateRequest(requestBody);
 
         yield return request.SendWebRequest();
 
@@ -110,12 +113,44 @@ As Mrs. Johnson, please initiate the conversation by greeting the nurse and ment
         }
         else if (request.responseCode == 200)
         {
-            Debug.Log("Response received: " + request.downloadHandler.text);
             var jsonResponse = JObject.Parse(request.downloadHandler.text);
-            var choices = jsonResponse["choices"];
-            var messageContent = choices[0]["message"]["content"].ToString();
+            var messageContent = jsonResponse["choices"][0]["message"]["content"].ToString();
             Debug.Log("AI (Mrs. Johnson) response: " + messageContent);
             chatMessages.Add(new Dictionary<string, string>() { { "role", "assistant" }, { "content", messageContent } });
+
+            // Play the response using TTS
+            if (TTSManager.Instance != null)
+            {
+                Debug.Log("Attempting to play TTS for the response");
+                TTSManager.Instance.ConvertTextToSpeech(messageContent);
+            }
+            else
+            {
+                Debug.LogError("TTSManager instance not found.");
+            }
         }
+    }
+
+    private string BuildRequestBody()
+    {
+        string requestBody = "{\"model\": \"gpt-4\", \"messages\": [";
+        foreach (var message in chatMessages)
+        {
+            string contentEscaped = message["content"].Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\n", "\\n").Replace("\r", "\\r");
+            requestBody += "{\"role\": \"" + message["role"] + "\", \"content\": \"" + contentEscaped + "\"},";
+        }
+        requestBody = requestBody.TrimEnd(',') + "]}";
+        return requestBody;
+    }
+
+    private UnityWebRequest CreateRequest(string requestBody)
+    {
+        var request = new UnityWebRequest(apiUrl, "POST");
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(requestBody);
+        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+        request.SetRequestHeader("Authorization", "Bearer " + apiKey);
+        return request;
     }
 }
