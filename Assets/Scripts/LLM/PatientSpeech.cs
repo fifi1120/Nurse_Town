@@ -18,12 +18,13 @@ public class OpenAIRequest : MonoBehaviour
     void Awake()
     {
         Instance = this; 
-        apiKey = EnvironmentLoader.GetEnvVariable("OPENAI_API_KEY");
-        Debug.Log("In awake here we are using APIKey:" + apiKey);
+
     }
 
     void Start()
     {
+        apiKey = EnvironmentLoader.GetEnvVariable("OPENAI_API_KEY");
+        Debug.Log("In awake here we are using APIKey:" + apiKey);
         string rolePlayingInstructions = @"
 You are strictly playing the role of Mrs. Johnson.
 
