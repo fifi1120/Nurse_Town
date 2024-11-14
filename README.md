@@ -13,9 +13,18 @@ To enable big file uploading, you need to use Git Large File Storage (Git LFS).
 
 ### Set up .env
 1. Ask admin for api keys
-2. Put .env to the root
+2. Put .env to the root:
+2.1 open your terminal, make sure you are in the nurse-town file
+2.2 create a new .env file: `touch .env`
+2.3 `nano .env` 
+2.4 add the apikey in the .env file: `OPENAI_API_KEY=your_actual_api_key_here` (normally we don't need to use quote mark with the apikey)
+2.5 ctrl+o then ctrl+x to save the change and exit nano
+2.6 check whether .env file exist: `ls -a`
+
+
 #### Note:
 \Assets\Scripts\EnvironmentLoader.cs is attached to the main camera
+
 ## Run the project:
 
 1. Clone the repository to your local machine.

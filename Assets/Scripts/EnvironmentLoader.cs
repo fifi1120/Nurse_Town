@@ -15,7 +15,9 @@ public class EnvironmentLoader : MonoBehaviour
     private void LoadEnvFile()
     {
         string filePath = Path.Combine(Application.dataPath, "../.env");
-        
+        Debug.Log("env loader file path: " + filePath);
+
+
         if (File.Exists(filePath))
         {
             Debug.Log("env loader file exists");
