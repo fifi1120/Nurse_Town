@@ -65,7 +65,7 @@ As Mrs. Johnson, please initiate the conversation by greeting the nurse and ment
         StartCoroutine(PostRequest());
     }
 
-    public void ReceiveNurseTranscription(string transcribedText)
+    public void ReceiveNurseTranscription(string transcribedText) // integrate with STT 11/13
     {
         NurseResponds(transcribedText);
     }

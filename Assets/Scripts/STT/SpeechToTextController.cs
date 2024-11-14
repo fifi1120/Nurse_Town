@@ -67,7 +67,7 @@ public class SpeechToTextController : MonoBehaviour
         // Optionally delete the temporary file
         File.Delete(filePath);
 
-        // 调用 OpenAIRequest 的方法发送转录文本
+        // Fiona update 11/13: integrate with patient NPC
         if (OpenAIRequest.Instance != null)
             {
                 OpenAIRequest.Instance.ReceiveNurseTranscription(transcription);
