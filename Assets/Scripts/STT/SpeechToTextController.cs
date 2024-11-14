@@ -66,6 +66,16 @@ public class SpeechToTextController : MonoBehaviour
 
         // Optionally delete the temporary file
         File.Delete(filePath);
+
+        // 调用 OpenAIRequest 的方法发送转录文本
+        if (OpenAIRequest.Instance != null)
+            {
+                OpenAIRequest.Instance.ReceiveNurseTranscription(transcription);
+            }
+        else
+            {
+                Debug.LogError("OpenAIRequest instance not found.");
+            }
     }
 
     private async Task<string> SendToWhisperAPI(string filePath, string model, string language, string responseFormat, float temperature)

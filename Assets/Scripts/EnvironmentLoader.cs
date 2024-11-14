@@ -9,6 +9,7 @@ public class EnvironmentLoader : MonoBehaviour
     void Awake()
     {
         LoadEnvFile();
+        Debug.Log("env loader awake");
     }
 
     private void LoadEnvFile()
@@ -17,6 +18,7 @@ public class EnvironmentLoader : MonoBehaviour
         
         if (File.Exists(filePath))
         {
+            Debug.Log("env loader file exists");
             string[] lines = File.ReadAllLines(filePath);
             foreach (string line in lines)
             {
