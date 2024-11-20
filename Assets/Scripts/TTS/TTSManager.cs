@@ -37,7 +37,6 @@ public class TTSManager : MonoBehaviour
     {
         // Load the API key securely, for example, from environment variables or a secure storage
         openAIApiKey = EnvironmentLoader.GetEnvVariable("OPENAI_API_KEY");
-        Debug.Log("OpenAI API Key: " + openAIApiKey);
     }
 
     // Public method to be called to convert text to speech
@@ -50,7 +49,7 @@ public class TTSManager : MonoBehaviour
         }
 
         // Get audio data from OpenAI's TTS service
-        Debug.Log($"TTS Manager: Converting text to speech: {text}");
+        // Debug.Log($"TTS Manager: Converting text to speech: {text}");
         byte[] audioData = await GetTTSAudio(text, "tts-1", "nova", "mp3", 1.0f);
         if (audioData != null)
         {
@@ -69,7 +68,7 @@ public class TTSManager : MonoBehaviour
         {
             // Set the authorization header with the API key
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + openAIApiKey);
-            Debug.Log("TTS Manager: Sending TTS request");
+            // Debug.Log("TTS Manager: Sending TTS request");
 
             // Create the request body
             var requestBody = new TTSRequest
@@ -91,7 +90,7 @@ public class TTSManager : MonoBehaviour
             if (response.IsSuccessStatusCode)
             {
                 // If the request is successful, read the byte array of the audio data
-                Debug.Log("TTS Manager: TTS request successful");
+                // Debug.Log("TTS Manager: TTS request successful");
                 return await response.Content.ReadAsByteArrayAsync();
             }
             else
@@ -126,7 +125,7 @@ public class TTSManager : MonoBehaviour
         {
             // If the file is successfully loaded, get the audio clip and play it
             AudioClip audioClip = DownloadHandlerAudioClip.GetContent(www);
-            Debug.Log("Audio clip loaded successfully");
+            // Debug.Log("Audio clip loaded successfully");
             audioSource.clip = audioClip;
             audioSource.Play();
         }

@@ -136,7 +136,7 @@ public class BodyMove : MonoBehaviour
         }
     }
     public static void PrintChatMessage(List<Dictionary<string, string>> messages)
-        {
+    {
         Debug.Log("══════════════ Chat Messages Log ══════════════");
         
         foreach (var message in messages)
