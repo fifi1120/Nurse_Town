@@ -8,6 +8,8 @@ using UnityEngine.Audio;
 using System.Collections;
 using Newtonsoft.Json;
 using System.Text;
+// for animation
+using System.Text.RegularExpressions;
 
 public class TTSManager : MonoBehaviour
 {
@@ -18,7 +20,8 @@ public class TTSManager : MonoBehaviour
     private string openAIApiKey; // API key for OpenAI
     private static readonly string ttsEndpoint = "https://api.openai.com/v1/audio/speech"; // Endpoint for TTS
     private const bool deleteCachedFile = true; // Flag to determine if the audio file should be deleted after playing
-
+    // for animation
+    private CharacterAnimationController animationController;
     void Awake()
     {
         if (Instance == null)
@@ -37,6 +40,7 @@ public class TTSManager : MonoBehaviour
     {
         // Load the API key securely, for example, from environment variables or a secure storage
         openAIApiKey = EnvironmentLoader.GetEnvVariable("OPENAI_API_KEY");
+        animationController = GetComponent<CharacterAnimationController>();
     }
 
     // Public method to be called to convert text to speech
@@ -48,12 +52,19 @@ public class TTSManager : MonoBehaviour
             return;
         }
 
+        // Strip emotion code for TTS but keep original text for animation
+        string ttsText = text;
+        Match match = Regex.Match(text, @"\[([0123456789])\]$");
+        if (match.Success)
+        {
+            ttsText = text.Substring(0, text.Length - 3).Trim();
+        }
+
         // Get audio data from OpenAI's TTS service
-        // Debug.Log($"TTS Manager: Converting text to speech: {text}");
-        byte[] audioData = await GetTTSAudio(text, "tts-1", "nova", "mp3", 1.0f);
+        byte[] audioData = await GetTTSAudio(ttsText, "tts-1", "nova", "mp3", 1.0f);
         if (audioData != null)
         {
-            ProcessAudioBytes(audioData);
+            ProcessAudioBytes(audioData, text); // Pass original text for animation
         }
         else
         {
@@ -104,18 +115,18 @@ public class TTSManager : MonoBehaviour
     }
 
     // Method to process and play the audio bytes received
-    private void ProcessAudioBytes(byte[] audioData)
+    private void ProcessAudioBytes(byte[] audioData, string messageContent)
     {
         // Save the audio data as a .mp3 file locally
         string filePath = Path.Combine(Application.persistentDataPath, "audio.mp3");
         File.WriteAllBytes(filePath, audioData);
 
         // Start coroutine to load and play the audio file
-        StartCoroutine(LoadAndPlayAudio(filePath));
+        StartCoroutine(LoadAndPlayAudio(filePath, messageContent));
     }
 
     // Coroutine to load and play the audio file
-    private IEnumerator LoadAndPlayAudio(string filePath)
+    private IEnumerator LoadAndPlayAudio(string filePath, string messageContent)
     {
         // Create a UnityWebRequest to load the audio file
         using UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip("file://" + filePath, AudioType.MPEG);
@@ -128,6 +139,7 @@ public class TTSManager : MonoBehaviour
             // Debug.Log("Audio clip loaded successfully");
             audioSource.clip = audioClip;
             audioSource.Play();
+            UpdateAnimation(messageContent);
         }
         else
         {
@@ -150,5 +162,53 @@ public class TTSManager : MonoBehaviour
         public string voice { get; set; }
         public string response_format { get; set; }
         public float speed { get; set; }
+    }
+
+        private void UpdateAnimation(string message)
+    {
+        Match match = Regex.Match(message, @"\[([0123456789])\]$");
+        if (match.Success)
+        {
+            int emotionCode = int.Parse(match.Groups[1].Value);
+            switch(emotionCode)
+            {
+                case 0:
+                    animationController.PlayIdle();
+                    break;
+                case 1:
+                    animationController.PlayHeadPain();
+                    Debug.Log("changing to pain");
+                    break;
+                case 2:
+                    animationController.PlayHappy();
+                    break;
+                case 3:
+                    animationController.PlayShrug();
+                    break;
+                case 4:
+                    animationController.PlayHeadNod();
+                    break;
+                case 5:
+                    animationController.PlayHeadShake();
+                    break;
+                case 6:
+                    animationController.PlayWrithingInPain();
+                    break;
+                case 7:
+                    animationController.PlaySad();
+                    break;
+                case 8:
+                    animationController.PlayArmStretch();
+                    break;
+                case 9:
+                    animationController.PlayNeckStretch();
+                    break;
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"No emotion code found: {message}");
+            animationController.PlayIdle();
+        }
     }
 }

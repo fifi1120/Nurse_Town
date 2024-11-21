@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class CharacterAnimationController : MonoBehaviour
 {
@@ -24,14 +25,53 @@ public class CharacterAnimationController : MonoBehaviour
 
     public void PlayHeadPain()
     {
-        // UpdateAnimationState(1);
-        animator.SetTrigger("pain");
-
+        StartCoroutine(PlayAnimationWithDelay("pain"));
     }
 
     public void PlayHappy()
     {
-        animator.SetTrigger("happy");
+        StartCoroutine(PlayAnimationWithDelay("happy"));
+    }
+
+    public void PlayShrug()
+    {
+        StartCoroutine(PlayAnimationWithDelay("shrug"));
+    }
+
+    public void PlayHeadNod()
+    {
+        StartCoroutine(PlayAnimationWithDelay("head_nod"));
+    }
+
+    public void PlayHeadShake()
+    {
+        StartCoroutine(PlayAnimationWithDelay("head_shake"));
+    }
+
+    public void PlayWrithingInPain()
+    {
+        StartCoroutine(PlayAnimationWithDelay("writhing_pain"));
+    }
+
+    public void PlaySad()
+    {
+        StartCoroutine(PlayAnimationWithDelay("sad"));
+    }
+
+    public void PlayArmStretch()
+    {
+        StartCoroutine(PlayAnimationWithDelay("arm_stretch"));
+    }
+
+    public void PlayNeckStretch()
+    {
+        StartCoroutine(PlayAnimationWithDelay("neck_stretch"));
+    }
+
+    private IEnumerator PlayAnimationWithDelay(string triggerName, float delay = 0.0f)
+    {
+        yield return new WaitForSeconds(delay);
+        animator.SetTrigger(triggerName);
     }
 
 }

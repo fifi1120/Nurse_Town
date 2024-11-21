@@ -75,13 +75,20 @@ public class OpenAIRequest : MonoBehaviour
             - Display some concern when discussing the family history of heart disease, but reassure the nurse that you usually don’t experience symptoms like this.
             - When the nurse suggests lifestyle changes or medication adherence strategies, be open but express some hesitation regarding making drastic changes to your routine.
 
-            As Mrs. Johnson, please initiate the conversation by greeting the nurse and mentioning how you're feeling. Please try to be concise.
+            As Mrs. Johnson, please initiate the conversation by greeting the nurse and mentioning how you're feeling. Please try to be concise. During the conversation, During the conversation, if the topic is not occurring in the clinical scenario, guide the conversation back to the medical setting and your health concerns.
             ";      
         string emotionInstructions = @"
-            IMPORTANT: You must end EVERY response with one of these emotion codes: [0], [1], or [2]\n
+            IMPORTANT: You must end EVERY response with one of these emotion codes:\n
             - Use [0] for neutral responses or statements\n
             - Use [1] for responses involving pain, discomfort, symptoms, or negative feelings\n
-            - Use [2] for positive responses, gratitude, or when feeling better\n";
+            - Use [2] for positive responses, gratitude, or when feeling better\n
+            - Use [3] for shrugging\n
+            - Use [4] for head nodding\n
+            - Use [5] for head shaking\n
+            - Use [6] for writhing in pain\n
+            - Use [7] for sad\n
+            - Use [8] for arm stretching\n
+            - Use [9] for neck stretching";
 
         chatMessages = new List<Dictionary<string, string>>()
         {
@@ -126,7 +133,7 @@ public class OpenAIRequest : MonoBehaviour
         {
             var jsonResponse = JObject.Parse(request.downloadHandler.text);
             var messageContent = jsonResponse["choices"][0]["message"]["content"].ToString();
-            UpdateAnimation(messageContent);
+            
             
             chatMessages.Add(new Dictionary<string, string>() { { "role", "assistant" }, { "content", messageContent } });
             PrintChatMessage(chatMessages);
@@ -141,6 +148,9 @@ public class OpenAIRequest : MonoBehaviour
             {
                 Debug.LogError("TTSManager instance not found.");
             }
+            // UpdateAnimation is moved to TTSManager.cs
+            // UpdateAnimation(messageContent);
+
         }
     }
 
@@ -183,6 +193,27 @@ public class OpenAIRequest : MonoBehaviour
                     break;
                 case 2:
                     animationController.PlayHappy();
+                    break;
+                case 3:
+                    animationController.PlayShrug();
+                    break;
+                case 4:
+                    animationController.PlayHeadNod();
+                    break;
+                case 5:
+                    animationController.PlayHeadShake();
+                    break;
+                case 6:
+                    animationController.PlayWrithingInPain();
+                    break;
+                case 7:
+                    animationController.PlaySad();
+                    break;
+                case 8:
+                    animationController.PlayArmStretch();
+                    break;
+                case 9:
+                    animationController.PlayNeckStretch();
                     break;
             }
         }
