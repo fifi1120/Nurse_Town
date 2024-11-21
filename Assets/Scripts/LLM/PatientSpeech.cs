@@ -15,10 +15,13 @@ using System.Text.RegularExpressions;
 public class OpenAIRequest : MonoBehaviour
 {
     public static OpenAIRequest Instance; // Singleton instance
+    
 
-    private string apiUrl = "https://api.openai.com/v1/chat/completions";
-    private string apiKey;
+    public string apiUrl = "https://api.openai.com/v1/chat/completions";
+    public string apiKey;
     private CharacterAnimationController animationController;
+
+    private ScoringSystem scoringSystem = new ScoringSystem(); // added at nov 21 for scoring system
 
     private List<Dictionary<string, string>> chatMessages;
 
@@ -75,7 +78,8 @@ public class OpenAIRequest : MonoBehaviour
             - Display some concern when discussing the family history of heart disease, but reassure the nurse that you usually don’t experience symptoms like this.
             - When the nurse suggests lifestyle changes or medication adherence strategies, be open but express some hesitation regarding making drastic changes to your routine.
 
-            As Mrs. Johnson, please initiate the conversation by greeting the nurse and mentioning how you're feeling. Please try to be concise. During the conversation, During the conversation, if the topic is not occurring in the clinical scenario, guide the conversation back to the medical setting and your health concerns.
+            As Mrs. Johnson, please initiate the conversation by greeting the nurse and mentioning how you're feeling. During the conversation, if the topic is not occurring in the clinical scenario, guide the conversation back to the medical setting and your health concerns.
+            Please make your speech concise and not too long.
             ";      
         string emotionInstructions = @"
             IMPORTANT: You must end EVERY response with one of these emotion codes:\n
@@ -112,7 +116,12 @@ public class OpenAIRequest : MonoBehaviour
         chatMessages.Add(new Dictionary<string, string>() { { "role", "user" }, { "content", nurseMessage } });
         PrintChatMessage(chatMessages);
         StartCoroutine(PostRequest());
+
+        // scoringSystem
+        scoringSystem.EvaluateNurseResponse(nurseMessage);
     }
+
+
 
 
     IEnumerator PostRequest()
@@ -225,24 +234,22 @@ public class OpenAIRequest : MonoBehaviour
     }
     public static void PrintChatMessage(List<Dictionary<string, string>> messages)
     {
-        Debug.Log("══════════════ Chat Messages Log ══════════════");
-        
-        foreach (var message in messages)
+        if (messages.Count == 0)
+            return;
+
+        var latestMessage = messages[messages.Count - 1];
+        string role = latestMessage["role"];
+        string content = latestMessage["content"];
+
+        // Extract emotion code if present
+        string emotionCode = "";
+        var match = Regex.Match(content, @"\[(\d+)\]$");
+        if (match.Success)
         {
-            string role = message["role"];
-            string content = message["content"];
-            
-            // Extract emotion code if present
-            string emotionCode = "";
-            var match = System.Text.RegularExpressions.Regex.Match(content, @"\[([012])\]$");
-            if (match.Success)
-            {
-                emotionCode = $" (Emotion: {match.Groups[1].Value})";
-            }
-            
-            Debug.Log($"[{role.ToUpper()}]{emotionCode}\n{content}\n");
+            emotionCode = $" (Emotion: {match.Groups[1].Value})";
         }
-        
-        Debug.Log("══════════════ End Chat Log ══════════════");
+
+        Debug.Log($"[{role.ToUpper()}]{emotionCode}\n{content}\n");
     }
+
 }
