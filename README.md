@@ -57,3 +57,9 @@ Testing the Speech Recognition System:
 1. Go to Assets/Scripts/STT/SpeechToTextController.cs, and change the value of openAIApiKey to our secret OpenAI API key.
 2. Open the STT-Test Scene in the same folder.
 3. Click Play and enter any text in the input field. Press and hold space bar to start recording and release to end. Transcribed text will appear below.
+
+
+### Debug reminder:
+1. You may see bugs like:
+`NullReferenceException: Object reference not set to an instance of an objectInputManger.LateUpdate () (at Assets/Scripts/InputManger.cs:34)`
+If you encounter this bug, it might be because you pressed “Play” and then “Pause.” The correct approach is to press “Play,” and if you want to stop, click “Play” again to cancel. Avoid using the “Pause” button.
