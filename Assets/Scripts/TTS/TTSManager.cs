@@ -22,6 +22,7 @@ public class TTSManager : MonoBehaviour
     private const bool deleteCachedFile = true; // Flag to determine if the audio file should be deleted after playing
     // for animation
     private CharacterAnimationController animationController;
+    private BloodEffectController bloodEffectController;    
     void Awake()
     {
         if (Instance == null)
@@ -41,6 +42,13 @@ public class TTSManager : MonoBehaviour
         // Load the API key securely, for example, from environment variables or a secure storage
         openAIApiKey = EnvironmentLoader.GetEnvVariable("OPENAI_API_KEY");
         animationController = GetComponent<CharacterAnimationController>();
+        
+        // Find the blood effect in the UI
+        bloodEffectController = GameObject.FindObjectOfType<BloodEffectController>();
+        if (bloodEffectController == null)
+        {
+            Debug.LogError("BloodEffectController not found in the scene. Make sure it exists in the UI!");
+        }
     }
 
     // Public method to be called to convert text to speech
@@ -198,6 +206,7 @@ public class TTSManager : MonoBehaviour
                     animationController.PlaySad();
                     break;
                 case 8:
+                    bloodEffectController.SetBloodVisibility(true);
                     animationController.PlayArmStretch();
                     break;
                 case 9:

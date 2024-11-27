@@ -19,7 +19,7 @@ public class OpenAIRequest : MonoBehaviour
     public string apiUrl = "https://api.openai.com/v1/chat/completions";
     public string apiKey;
     private CharacterAnimationController animationController;
-
+    private BloodEffectController bloodEffectController;
     private ScoringSystem scoringSystem = new ScoringSystem(); // For scoring system
 
     private List<Dictionary<string, string>> chatMessages;
@@ -54,6 +54,7 @@ public class OpenAIRequest : MonoBehaviour
         InitializeChat();
 
         animationController = GetComponent<CharacterAnimationController>();
+        bloodEffectController = GetComponent<BloodEffectController>();
     }
 
     private void InitializePatientInstructions()
@@ -238,58 +239,6 @@ public class OpenAIRequest : MonoBehaviour
         request.SetRequestHeader("Content-Type", "application/json");
         request.SetRequestHeader("Authorization", "Bearer " + apiKey);
         return request;
-    }
-
-    private void UpdateAnimation(string message)
-    {
-        Match match = Regex.Match(message, @"\[(\d+)\]$");
-        if (match.Success)
-        {
-            int emotionCode = int.Parse(match.Groups[1].Value);
-            switch (emotionCode)
-            {
-                case 0:
-                    animationController.PlayIdle();
-                    break;
-                case 1:
-                    animationController.PlayHeadPain();
-                    Debug.Log("Changing to pain animation");
-                    break;
-                case 2:
-                    animationController.PlayHappy();
-                    break;
-                case 3:
-                    animationController.PlayShrug();
-                    break;
-                case 4:
-                    animationController.PlayHeadNod();
-                    break;
-                case 5:
-                    animationController.PlayHeadShake();
-                    break;
-                case 6:
-                    animationController.PlayWrithingInPain();
-                    break;
-                case 7:
-                    animationController.PlaySad();
-                    break;
-                case 8:
-                    animationController.PlayArmStretch();
-                    break;
-                case 9:
-                    animationController.PlayNeckStretch();
-                    break;
-                default:
-                    Debug.LogWarning($"Unknown emotion code: {emotionCode}");
-                    animationController.PlayIdle();
-                    break;
-            }
-        }
-        else
-        {
-            Debug.LogWarning($"No emotion code found in message: {message}");
-            animationController.PlayIdle();
-        }
     }
 
     public static void PrintChatMessage(List<Dictionary<string, string>> messages)
