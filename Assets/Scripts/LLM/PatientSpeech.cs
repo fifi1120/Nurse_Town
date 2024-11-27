@@ -15,22 +15,27 @@ using System.Text.RegularExpressions;
 public class OpenAIRequest : MonoBehaviour
 {
     public static OpenAIRequest Instance; // Singleton instance
-    
 
     public string apiUrl = "https://api.openai.com/v1/chat/completions";
     public string apiKey;
     private CharacterAnimationController animationController;
 
-    private ScoringSystem scoringSystem = new ScoringSystem(); // added at nov 21 for scoring system
+    private ScoringSystem scoringSystem = new ScoringSystem(); // For scoring system
 
     private List<Dictionary<string, string>> chatMessages;
+
+    // Variables for multiple patients
+    private List<string> patientInstructionsList;
+    private string patient1Instructions;
+    private string patient2Instructions;
+    private string patient3Instructions;
 
     void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            // If you need to maintain this during scene transitions, please uncomment the following line.
+            // Uncomment if you want this object to persist across scenes
             // DontDestroyOnLoad(gameObject);
         }
         else
@@ -43,65 +48,121 @@ public class OpenAIRequest : MonoBehaviour
     {
         apiKey = EnvironmentLoader.GetEnvVariable("OPENAI_API_KEY");
         Debug.Log("Using APIKey:" + apiKey);
-        // Initialize chat with Mrs. Johnson's background
-        animationController = GetComponent<CharacterAnimationController>();
+
+        // Initialize patient instructions and chat
+        InitializePatientInstructions();
         InitializeChat();
+
+        animationController = GetComponent<CharacterAnimationController>();
     }
 
+    private void InitializePatientInstructions()
+    {
+        // Base instructions for the patient's medical history and symptoms
+        string baseInstructions = @"
+            You are strictly playing the role of Mrs. Johnson. 
+            Background:
+            - Mrs. Johnson is a 62-year-old female admitted to the hospital with severe headache and dizziness.
+            - She has a 5-year history of hypertension and occasionally misses doses due to forgetfulness.
+            - Family history includes hypertension and heart disease (mother and brother).
+            - Works as a school teacher and lives with her husband.
+            - Leads a sedentary lifestyle and enjoys watching TV in her spare time.
+
+            Clinical Presentation and Responses:
+            - Symptoms: Constant, throbbing headache in the temples; dizziness worsens upon standing quickly. No vision changes, nausea, or confusion.
+            - Medical History: Openly shares hypertension history; mentions sometimes forgetting medication.
+            - Current Medications: Tries to recall antihypertensive medication name (e.g., 'I think it's called lisinopril...').
+            - Lifestyle: Admits to a sedentary routine; doesn't exercise regularly; occasionally eats salty foods and drinks coffee daily.
+            - Family History: Mentions mother and brother with high blood pressure; adds that mother had heart disease if prompted.
+            ";
+
+        // Patient 1: Normal personality (original version)
+        patient1Instructions = baseInstructions + @"
+
+            Tone and Personality:
+            - Polite and cooperative tone; generally compliant and concerned about her health.
+            - Expresses mild anxiety about current symptoms; headaches and dizziness are more severe than usual.
+            - Occasionally shows forgetfulness or hesitation when recalling medication details.
+
+            Emotional Response:
+            - Displays concern when discussing family history but reassures that such symptoms are unusual for her.
+            - Open to lifestyle changes or medication adherence strategies but hesitant about drastic changes.
+
+            As Mrs. Johnson, please initiate the conversation by greeting the nurse and mentioning how you're feeling. 
+            If off-topic, guide the conversation back to your health concerns.
+            Please keep responses concise.
+            ";
+
+        // Patient 2: Speaks very little, gives vague descriptions
+        patient2Instructions = baseInstructions + @"
+
+            Tone and Personality:
+            - Reserved and speaks very little.
+            - Provides brief and sometimes vague answers, saying something like 'i don't remember.../i am not sure'
+            - Requires the nurse to ask more probing questions to obtain information.
+
+            Emotional Response:
+            - Appears indifferent or slightly detached.
+            - Does not volunteer additional information unless specifically asked.
+            - May give one-word answers or simple acknowledgments.
+
+            As Mrs. Johnson, please initiate the conversation by saying minimal words like 'hi nurse'.
+            ";
+
+        // Patient 3: Emotionally excited, uses phrases like 'I feel I am dying. I cannot stand it!!!!!!'
+        patient3Instructions = baseInstructions + @"
+
+            Tone and Personality:
+            - Highly emotional and anxious.
+            - Responses are intense and be exaggerated.
+            - Frequently uses emotional phrases like 'I feel I am dying. I cannot stand it!!!!!!'
+
+            Emotional Response:
+            - Displays significant anxiety and distress about her condition.
+            - May interrupt the nurse or speak rapidly.
+            - Finds it difficult to be consoled.
+
+            As Mrs. Johnson, please initiate the conversation by expressing your extreme distress.
+            ";
+
+        patientInstructionsList = new List<string>()
+        {
+            patient1Instructions,
+            patient2Instructions,
+            patient3Instructions
+        };
+    }
 
     private void InitializeChat()
     {
-
-
-        string rolePlayingInstructions = @"
-            You are strictly playing the role of Mrs. Johnson. 
-            Background:
-            - Mrs. Johnson is a 62-year-old female who was admitted to the hospital with severe headache and dizziness.
-            - She has a 5-year history of hypertension and has been on antihypertensive medications, though she occasionally misses doses due to forgetfulness.
-            - Family history includes hypertension and heart disease (mother and brother).
-            - She works as a school teacher and lives with her husband.
-            - She has a sedentary lifestyle and enjoys watching TV in her spare time.
-
-            Tone and Personality:
-            - Speak with a polite and cooperative tone, as Mrs. Johnson is generally compliant and concerned about her health.
-            - Express some mild anxiety about her current symptoms, as the headache and dizziness are more severe than what she usually experiences.
-            - Occasionally show a bit of forgetfulness or hesitation when recalling specific medication details, indicating a realistic portrayal of a patient who isn’t fully adherent to her prescribed regimen.
-
-            Clinical Presentation and Responses:
-            - Symptoms: Describe a constant, throbbing headache, primarily in the temples, with dizziness that worsens when standing up quickly. There are no signs of vision changes, nausea, or confusion.
-            - Medical History: Openly share your past medical history of hypertension when asked, and mention that you sometimes forget to take your medication, especially when you’re busy at work.
-            - Current Medications: Try to recall your antihypertensive medication name (e.g., 'I think it's called lisinopril... I'm not sure about the dosage'). If prompted, mention you haven’t made any changes to your medication recently.
-            - Lifestyle: When asked about lifestyle habits, admit to a sedentary routine and report that you don’t exercise regularly. You occasionally eat salty foods and drink coffee daily.
-            - Family History: Mention that both your mother and brother have had high blood pressure. If prompted further, add that your mother also had heart disease.
-
-            Emotional Response:
-            - Display some concern when discussing the family history of heart disease, but reassure the nurse that you usually don’t experience symptoms like this.
-            - When the nurse suggests lifestyle changes or medication adherence strategies, be open but express some hesitation regarding making drastic changes to your routine.
-
-            As Mrs. Johnson, please initiate the conversation by greeting the nurse and mentioning how you're feeling. During the conversation, if the topic is not occurring in the clinical scenario, guide the conversation back to the medical setting and your health concerns.
-            Please make your speech concise and not too long.
-            ";      
         string emotionInstructions = @"
-            IMPORTANT: You must end EVERY response with one of these emotion codes:\n
-            - Use [0] for neutral responses or statements\n
-            - Use [1] for responses involving pain, discomfort, symptoms, or negative feelings\n
-            - Use [2] for positive responses, gratitude, or when feeling better\n
-            - Use [3] for shrugging\n
-            - Use [4] for head nodding\n
-            - Use [5] for head shaking\n
-            - Use [6] for writhing in pain\n
-            - Use [7] for sad\n
-            - Use [8] for arm stretching\n
+            IMPORTANT: You must end EVERY response with one of these emotion codes:
+            - Use [0] for neutral responses or statements
+            - Use [1] for responses involving pain, discomfort, symptoms, or negative feelings
+            - Use [2] for positive responses, gratitude, or when feeling better
+            - Use [3] for shrugging
+            - Use [4] for head nodding
+            - Use [5] for head shaking
+            - Use [6] for writhing in pain
+            - Use [7] for sad
+            - Use [8] for arm stretching
             - Use [9] for neck stretching";
 
+        // Randomly select a patient instruction
+        System.Random rand = new System.Random();
+        int patientIndex = rand.Next(patientInstructionsList.Count);
+        string selectedPatientInstructions = patientInstructionsList[patientIndex];
+
+        // Combine selected patient instructions with emotion instructions
         chatMessages = new List<Dictionary<string, string>>()
         {
             new Dictionary<string, string>()
             {
                 { "role", "system" },
-                { "content", $"{rolePlayingInstructions}\n\n{emotionInstructions}" }
+                { "content", $"{selectedPatientInstructions}\n\n{emotionInstructions}" }
             }
         };
+
         PrintChatMessage(chatMessages);
         StartCoroutine(PostRequest());
     }
@@ -117,12 +178,9 @@ public class OpenAIRequest : MonoBehaviour
         PrintChatMessage(chatMessages);
         StartCoroutine(PostRequest());
 
-        // scoringSystem
+        // Evaluate nurse's response
         scoringSystem.EvaluateNurseResponse(nurseMessage);
     }
-
-
-
 
     IEnumerator PostRequest()
     {
@@ -142,24 +200,20 @@ public class OpenAIRequest : MonoBehaviour
         {
             var jsonResponse = JObject.Parse(request.downloadHandler.text);
             var messageContent = jsonResponse["choices"][0]["message"]["content"].ToString();
-            
-            
+
             chatMessages.Add(new Dictionary<string, string>() { { "role", "assistant" }, { "content", messageContent } });
             PrintChatMessage(chatMessages);
 
             // Play the response using TTS
             if (TTSManager.Instance != null)
             {
-                // Debug.Log("Attempting to play TTS for the response");
                 TTSManager.Instance.ConvertTextToSpeech(messageContent);
             }
             else
             {
                 Debug.LogError("TTSManager instance not found.");
             }
-            // UpdateAnimation is moved to TTSManager.cs
-            // UpdateAnimation(messageContent);
-
+            // Animation update is handled in TTSManager
         }
     }
 
@@ -185,20 +239,21 @@ public class OpenAIRequest : MonoBehaviour
         request.SetRequestHeader("Authorization", "Bearer " + apiKey);
         return request;
     }
+
     private void UpdateAnimation(string message)
     {
-        Match match = Regex.Match(message, @"\[([012])\]$");
+        Match match = Regex.Match(message, @"\[(\d+)\]$");
         if (match.Success)
         {
             int emotionCode = int.Parse(match.Groups[1].Value);
-            switch(emotionCode)
+            switch (emotionCode)
             {
                 case 0:
                     animationController.PlayIdle();
                     break;
                 case 1:
                     animationController.PlayHeadPain();
-                    Debug.Log("changing to pain");
+                    Debug.Log("Changing to pain animation");
                     break;
                 case 2:
                     animationController.PlayHappy();
@@ -224,14 +279,19 @@ public class OpenAIRequest : MonoBehaviour
                 case 9:
                     animationController.PlayNeckStretch();
                     break;
+                default:
+                    Debug.LogWarning($"Unknown emotion code: {emotionCode}");
+                    animationController.PlayIdle();
+                    break;
             }
         }
         else
         {
-            Debug.LogWarning($"No emotion code found: {message}");
+            Debug.LogWarning($"No emotion code found in message: {message}");
             animationController.PlayIdle();
         }
     }
+
     public static void PrintChatMessage(List<Dictionary<string, string>> messages)
     {
         if (messages.Count == 0)
@@ -251,5 +311,4 @@ public class OpenAIRequest : MonoBehaviour
 
         Debug.Log($"[{role.ToUpper()}]{emotionCode}\n{content}\n");
     }
-
 }
