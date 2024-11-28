@@ -22,7 +22,8 @@ public class TTSManager : MonoBehaviour
     private const bool deleteCachedFile = true; // Flag to determine if the audio file should be deleted after playing
     // for animation
     private CharacterAnimationController animationController;
-    private BloodEffectController bloodEffectController;    
+    private BloodEffectController bloodEffectController;  
+    private BloodTextController bloodTextController;
     void Awake()
     {
         if (Instance == null)
@@ -48,6 +49,11 @@ public class TTSManager : MonoBehaviour
         if (bloodEffectController == null)
         {
             Debug.LogError("BloodEffectController not found in the scene. Make sure it exists in the UI!");
+        }
+        bloodTextController = GameObject.FindObjectOfType<BloodTextController>();
+        if (bloodTextController == null)
+        {
+            Debug.LogError("BloodTextController not found in the scene. Make sure it exists in the UI!");
         }
     }
 
@@ -207,6 +213,7 @@ public class TTSManager : MonoBehaviour
                     break;
                 case 8:
                     bloodEffectController.SetBloodVisibility(true);
+                    bloodTextController.SetBloodTextVisibility(true);
                     animationController.PlayArmStretch();
                     break;
                 case 9:
