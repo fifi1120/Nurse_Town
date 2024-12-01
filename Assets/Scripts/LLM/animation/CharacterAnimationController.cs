@@ -68,6 +68,11 @@ public class CharacterAnimationController : MonoBehaviour
         StartCoroutine(PlayAnimationWithDelay("neck_stretch"));
     }
 
+    public void PlayBloodPressure()
+    {
+        StartCoroutine(PlayAnimationWithDelay("blood_pre"));
+    }
+
     private IEnumerator PlayAnimationWithDelay(string triggerName, float delay = 0.0f)
     {
         yield return new WaitForSeconds(delay);

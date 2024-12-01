@@ -147,7 +147,8 @@ public class OpenAIRequest : MonoBehaviour
             - Use [6] for writhing in pain
             - Use [7] for sad
             - Use [8] for arm stretching
-            - Use [9] for neck stretching";
+            - Use [9] for neck stretching
+            - Use [10] for blood pressureing, if the nurse asks to measure your blood pressure";
 
         // Randomly select a patient instruction
         System.Random rand = new System.Random();

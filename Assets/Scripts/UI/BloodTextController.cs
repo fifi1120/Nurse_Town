@@ -1,17 +1,13 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class BloodTextController : MonoBehaviour
 {
     private TextMeshProUGUI pressF_Text;
-    
-    [SerializeField] 
-    private bool showBlood = false;
+    [SerializeField] private bool showBlood = false;
     
     void Start()
     {
-
         pressF_Text = GameObject.Find("bloodText").GetComponent<TextMeshProUGUI>();
         if (pressF_Text == null)
         {
@@ -19,20 +15,13 @@ public class BloodTextController : MonoBehaviour
         }
         else
         {
-            Debug.Log("PressF Text found successfully!");
-        }
-
-        if (pressF_Text != null)
-        {
+            pressF_Text.text = "Press F to measure blood pressure";
             pressF_Text.enabled = showBlood;
         }
     }
 
     void Update()
     {
-        // Add null checks before accessing components
-
-
         if (pressF_Text != null)
         {
             pressF_Text.enabled = showBlood;
@@ -42,7 +31,6 @@ public class BloodTextController : MonoBehaviour
     public void SetBloodTextVisibility(bool show)
     {
         showBlood = show;
-        Debug.Log("Showing blood called: " + showBlood);
+        Debug.Log("Showing blood text called: " + showBlood);
     }
-
 }

@@ -68,7 +68,7 @@ public class TTSManager : MonoBehaviour
 
         // Strip emotion code for TTS but keep original text for animation
         string ttsText = text;
-        Match match = Regex.Match(text, @"\[([0123456789])\]$");
+        Match match = Regex.Match(text, @"\[([0-9]|10)\]$");
         if (match.Success)
         {
             ttsText = text.Substring(0, text.Length - 3).Trim();
@@ -180,7 +180,7 @@ public class TTSManager : MonoBehaviour
 
         private void UpdateAnimation(string message)
     {
-        Match match = Regex.Match(message, @"\[([0123456789])\]$");
+        Match match = Regex.Match(message, @"\[([0-9]|10)\]$");
         if (match.Success)
         {
             int emotionCode = int.Parse(match.Groups[1].Value);
@@ -212,12 +212,16 @@ public class TTSManager : MonoBehaviour
                     animationController.PlaySad();
                     break;
                 case 8:
-                    bloodEffectController.SetBloodVisibility(true);
-                    bloodTextController.SetBloodTextVisibility(true);
                     animationController.PlayArmStretch();
                     break;
                 case 9:
                     animationController.PlayNeckStretch();
+                    break;
+                case 10:
+                    animationController.PlayBloodPressure();
+                    bloodEffectController.SetBloodVisibility(true);
+                    bloodTextController.SetBloodTextVisibility(true);
+
                     break;
             }
         }
