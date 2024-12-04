@@ -11,9 +11,9 @@ using System.Text;
 // for animation
 using System.Text.RegularExpressions;
 
-public class TTSManager : MonoBehaviour
+public class sitTTSManager : MonoBehaviour
 {
-    public static TTSManager Instance { get; private set; } // 单例实例
+    public static sitTTSManager Instance { get; private set; } 
 
     public AudioSource audioSource; // Reference to the AudioSource where the speech will be played.
 
@@ -21,7 +21,7 @@ public class TTSManager : MonoBehaviour
     private static readonly string ttsEndpoint = "https://api.openai.com/v1/audio/speech"; // Endpoint for TTS
     private const bool deleteCachedFile = true; // Flag to determine if the audio file should be deleted after playing
     // for animation
-    private CharacterAnimationController animationController;
+    private sitCharacterAnimationController animationController;
     private BloodEffectController bloodEffectController;  
     private BloodTextController bloodTextController;
     void Awake()
@@ -40,9 +40,17 @@ public class TTSManager : MonoBehaviour
 
     void Start()
     {
-        // Load the API key securely, for example, from environment variables or a secure storage
+        // Load the API key securely
         openAIApiKey = EnvironmentLoader.GetEnvVariable("OPENAI_API_KEY");
-        animationController = GetComponent<CharacterAnimationController>();
+        Debug.Log($"[start]API Key loaded: {!string.IsNullOrEmpty(openAIApiKey)}"); // Will print true/false without exposing the key
+        
+        if (string.IsNullOrEmpty(openAIApiKey))
+        {
+            Debug.LogError("TTS Manager: OpenAI API key is missing! Make sure OPENAI_API_KEY environment variable is set.");
+            return;
+        }
+        
+        animationController = GetComponent<sitCharacterAnimationController>();
         
         // Find the blood effect in the UI
         bloodEffectController = GameObject.FindObjectOfType<BloodEffectController>();
@@ -91,38 +99,47 @@ public class TTSManager : MonoBehaviour
     {
         using (HttpClient client = new HttpClient())
         {
-            // Set the authorization header with the API key
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + openAIApiKey);
-            Debug.Log("TTS Manager: Sending TTS request");
-
-            // Create the request body
-            var requestBody = new TTSRequest
+            try 
             {
-                model = model,
-                input = inputText,
-                voice = voice,
-                response_format = responseFormat,
-                speed = speed
-            };
+                // Make sure to include "Bearer " prefix with the API key
+                client.DefaultRequestHeaders.Clear(); // Clear any existing headers
+                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {openAIApiKey.Trim()}");
+                
+                Debug.Log("Authorization header set"); // Confirm header is being set
+                
+                var requestBody = new TTSRequest
+                {
+                    model = model,
+                    input = inputText,
+                    voice = voice,
+                    response_format = responseFormat,
+                    speed = speed
+                };
 
-            // Serialize the request body to JSON
-            string jsonContent = JsonConvert.SerializeObject(requestBody);
-            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+                string jsonContent = JsonConvert.SerializeObject(requestBody);
+                Debug.Log($"Request body: {jsonContent}"); // Check the request body
+                
+                var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-            // Send the POST request
-            HttpResponseMessage response = await client.PostAsync(ttsEndpoint, content);
+                // Send the POST request
+                HttpResponseMessage response = await client.PostAsync(ttsEndpoint, content);
+                
+                Debug.Log($"Response status: {response.StatusCode}"); // Log the response status
 
-            if (response.IsSuccessStatusCode)
-            {
-                // If the request is successful, read the byte array of the audio data
-                // Debug.Log("TTS Manager: TTS request successful");
-                return await response.Content.ReadAsByteArrayAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsByteArrayAsync();
+                }
+                else
+                {
+                    string errorResponse = await response.Content.ReadAsStringAsync();
+                    Debug.LogError($"Error with TTS API: {response.StatusCode} - {response.ReasonPhrase}\nDetails: {errorResponse}");
+                    return null;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                // Log error if the request fails
-                string errorResponse = await response.Content.ReadAsStringAsync();
-                Debug.LogError("Error with TTS API: " + response.ReasonPhrase + "\nDetails: " + errorResponse);
+                Debug.LogError($"Exception in GetTTSAudio: {ex.Message}\nStack trace: {ex.StackTrace}");
                 return null;
             }
         }
@@ -180,48 +197,32 @@ public class TTSManager : MonoBehaviour
 
         private void UpdateAnimation(string message)
     {
-        Match match = Regex.Match(message, @"\[([0-9]|10)\]$");
+        Match match = Regex.Match(message, @"\[([0-5])\]$");
         if (match.Success)
         {
             int emotionCode = int.Parse(match.Groups[1].Value);
             switch(emotionCode)
             {
                 case 0:
-                    animationController.PlayIdle();
+                    animationController.PlayBend();
                     break;
                 case 1:
-                    animationController.PlayHeadPain();
-                    Debug.Log("changing to pain");
+                    animationController.PlayRubArm();
                     break;
                 case 2:
-                    animationController.PlayHappy();
-                    break;
-                case 3:
-                    animationController.PlayShrug();
-                    break;
-                case 4:
-                    animationController.PlayHeadNod();
-                    break;
-                case 5:
-                    animationController.PlayHeadShake();
-                    break;
-                case 6:
-                    animationController.PlayWrithingInPain();
-                    break;
-                case 7:
                     animationController.PlaySad();
                     break;
-                case 8:
-                    animationController.PlayArmStretch();
+                case 3:
+                    animationController.PlayThumbUp();
                     break;
-                case 9:
-                    animationController.PlayNeckStretch();
-                    break;
-                case 10:
+                case 4:
                     animationController.PlayBloodPressure();
                     bloodEffectController.SetBloodVisibility(true);
                     bloodTextController.SetBloodTextVisibility(true);
-
+                    break;
+                default:
+                    Debug.LogWarning($"Invalid emotion code: {emotionCode}");
+                    animationController.PlayIdle();
                     break;
             }
         }

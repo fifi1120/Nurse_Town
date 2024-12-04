@@ -68,7 +68,10 @@ public class BloodEffectController : MonoBehaviour
         if (animator != null)
         {
             animator.SetTrigger("after_blood_mea");
-            Debug.Log("Animation trigger set: after_blood_mea");
+            animator.SetTrigger("after_BP");
+            
+
+            Debug.Log("Animation trigger set: after_blood_mea, after_BP");
         }
         else
         {

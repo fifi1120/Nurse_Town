@@ -60,7 +60,7 @@ public class SpeechToTextController : MonoBehaviour
 
         // Send the WAV file to OpenAI Whisper API
         string transcription = await SendToWhisperAPI(filePath, "whisper-1", "en", "json", 0.2f);
-
+       
         // Display only the transcription text
         transcriptText.text = transcription;
 
@@ -68,13 +68,22 @@ public class SpeechToTextController : MonoBehaviour
         File.Delete(filePath);
 
         // Fiona update 11/13: integrate with patient NPC
-        if (OpenAIRequest.Instance != null)
+        // if (OpenAIRequest.Instance != null)
+        //     {
+        //         OpenAIRequest.Instance.ReceiveNurseTranscription(transcription);
+        //     }
+        // else
+        //     {
+        //         Debug.LogError("OpenAIRequest instance not found.");
+        //     }
+        // for sitting char
+        if (sitPatientSpeech.Instance != null)
             {
-                OpenAIRequest.Instance.ReceiveNurseTranscription(transcription);
+                sitPatientSpeech.Instance.ReceiveNurseTranscription(transcription);
             }
         else
             {
-                Debug.LogError("OpenAIRequest instance not found.");
+                Debug.LogError("sitPatientSpeech instance not found.");
             }
     }
 
