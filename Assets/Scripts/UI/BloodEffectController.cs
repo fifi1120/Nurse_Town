@@ -16,7 +16,21 @@ public class BloodEffectController : MonoBehaviour
         blood = GetComponent<Image>();
         blood.enabled = showBlood;
         bloodTextController = FindObjectOfType<BloodTextController>();
-        animator = FindObjectOfType<Animator>();
+        
+        // Find the specific Sitting animator
+        GameObject sittingObject = GameObject.Find("Sitting");
+        if (sittingObject != null)
+        {
+            animator = sittingObject.GetComponent<Animator>();
+            if (animator == null)
+            {
+                Debug.LogError("Animator component not found on Sitting GameObject!");
+            }
+        }
+        else
+        {
+            Debug.LogError("Sitting GameObject not found in scene!");
+        }
         
         // Find blood pressure text by name
         bloodPressureText = GameObject.Find("bloodPresureVal").GetComponent<TextMeshProUGUI>();
@@ -67,10 +81,9 @@ public class BloodEffectController : MonoBehaviour
         // Trigger the animation
         if (animator != null)
         {
-            animator.SetTrigger("after_blood_mea");
+            // animator.SetTrigger("after_blood_mea");
             animator.SetTrigger("after_BP");
             
-
             Debug.Log("Animation trigger set: after_blood_mea, after_BP");
         }
         else
