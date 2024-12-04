@@ -17,7 +17,7 @@ public class SpeechToTextController : MonoBehaviour
     void Start()
     {
         openAiApiKey = EnvironmentLoader.GetEnvVariable("OPENAI_API_KEY");
-        Debug.Log("APIKey:" + openAiApiKey);
+        // Debug.Log("APIKey:" + openAiApiKey);
         
     }
 

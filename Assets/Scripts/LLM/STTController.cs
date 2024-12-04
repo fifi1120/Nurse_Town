@@ -24,7 +24,7 @@ public class STTController : MonoBehaviour
     {
         openAiApiKey = EnvironmentLoader.GetEnvVariable("OPENAI_API_KEY");
         bodyMove = FindObjectOfType<BodyMove>();
-        Debug.Log("APIKey loaded (hidden for security)");
+        // Debug.Log("APIKey loaded (hidden for security)");
     }
 
     void Update()

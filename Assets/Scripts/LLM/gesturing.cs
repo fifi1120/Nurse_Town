@@ -17,7 +17,7 @@ public class BodyMove : MonoBehaviour
     void Start()
     {
         apiKey = EnvironmentLoader.GetEnvVariable("OPENAI_API_KEY");
-        Debug.Log("APIKey:" + apiKey);
+        // Debug.Log("APIKey:" + apiKey);
         animationController = GetComponent<CharacterAnimationController>();
         InitializeChat();
     }
