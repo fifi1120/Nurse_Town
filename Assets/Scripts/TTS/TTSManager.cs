@@ -17,8 +17,10 @@ public class TTSManager : MonoBehaviour
 
     public AudioSource audioSource; // Reference to the AudioSource where the speech will be played.
 
-    private string openAIApiKey; // API key for OpenAI
-    private static readonly string ttsEndpoint = "https://api.openai.com/v1/audio/speech"; // Endpoint for TTS
+    // private string openAIApiKey; // API key for OpenAI
+    private string elevenLabsApiKey; // API key for Eleven Labs
+    // private static readonly string ttsEndpoint = "https://api.openai.com/v1/audio/speech"; // Endpoint for TTS
+    private static readonly string ttsEndpoint = "https://api.elevenlabs.io/v1/text-to-speech";
     private const bool deleteCachedFile = true; // Flag to determine if the audio file should be deleted after playing
     // for animation
     private CharacterAnimationController animationController;
@@ -41,7 +43,9 @@ public class TTSManager : MonoBehaviour
     void Start()
     {
         // Load the API key securely, for example, from environment variables or a secure storage
-        openAIApiKey = EnvironmentLoader.GetEnvVariable("OPENAI_API_KEY");
+        // openAIApiKey = EnvironmentLoader.GetEnvVariable("OPENAI_API_KEY");
+        elevenLabsApiKey = EnvironmentLoader.GetEnvVariable("ELEVENLABS_API_KEY");
+        Debug.Log("TTS Manager: API key loaded");
         animationController = GetComponent<CharacterAnimationController>();
         
         // Find the blood effect in the UI
@@ -75,54 +79,133 @@ public class TTSManager : MonoBehaviour
         }
 
         // Get audio data from OpenAI's TTS service
-        byte[] audioData = await GetTTSAudio(ttsText, "tts-1", "nova", "mp3", 1.0f);
+    //     byte[] audioData = await GetTTSAudio(ttsText, "tts-1", "nova", "mp3", 1.0f);
+    //     if (audioData != null)
+    //     {
+    //         ProcessAudioBytes(audioData, text); // Pass original text for animation
+    //     }
+    //     else
+    //     {
+    //         Debug.LogError("TTS Manager: Failed to get audio data");
+    //     }
+
+    // Get audio data from ElevenLabs TTS service
+        byte[] audioData = await GetElevenLabsTTSAudio(
+            ttsText,
+            "Bz0vsNJm8uY1hbd4c4AE", // voice ID 
+            "eleven_multilingual_v2", // Default model
+            0.4f,   // stability
+            0.75f,  // similarity_boost
+            0.3f    // style_exaggeration
+        );
+        
         if (audioData != null)
         {
             ProcessAudioBytes(audioData, text); // Pass original text for animation
         }
         else
         {
-            Debug.LogError("TTS Manager: Failed to get audio data");
+            Debug.LogError("TTS Manager: Failed to get audio data from ElevenLabs");
         }
     }
 
-    // Method to get TTS audio from OpenAI
-    private async Task<byte[]> GetTTSAudio(string inputText, string model, string voice, string responseFormat = "mp3", float speed = 1.0f)
+    // // Method to get TTS audio from OpenAI
+    // private async Task<byte[]> GetTTSAudio(string inputText, string model, string voice, string responseFormat = "mp3", float speed = 1.0f)
+    // {
+    //     using (HttpClient client = new HttpClient())
+    //     {
+    //         // Set the authorization header with the API key
+    //         client.DefaultRequestHeaders.Add("Authorization", "Bearer " + openAIApiKey);
+    //         Debug.Log("TTS Manager: Sending TTS request");
+
+    //         // Create the request body
+    //         var requestBody = new TTSRequest
+    //         {
+    //             model = model,
+    //             input = inputText,
+    //             voice = voice,
+    //             response_format = responseFormat,
+    //             speed = speed
+    //         };
+
+    //         // Serialize the request body to JSON
+    //         string jsonContent = JsonConvert.SerializeObject(requestBody);
+    //         var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+    //         // Send the POST request
+    //         HttpResponseMessage response = await client.PostAsync(ttsEndpoint, content);
+
+    //         if (response.IsSuccessStatusCode)
+    //         {
+    //             // If the request is successful, read the byte array of the audio data
+    //             // Debug.Log("TTS Manager: TTS request successful");
+    //             return await response.Content.ReadAsByteArrayAsync();
+    //         }
+    //         else
+    //         {
+    //             // Log error if the request fails
+    //             string errorResponse = await response.Content.ReadAsStringAsync();
+    //             Debug.LogError("Error with TTS API: " + response.ReasonPhrase + "\nDetails: " + errorResponse);
+    //             return null;
+    //         }
+    //     }
+    // }
+    // Method to get TTS audio from ElevenLabs
+    private async Task<byte[]> GetElevenLabsTTSAudio(
+        string inputText, 
+        string voiceId, 
+        string modelId, 
+        float stability = 0.4f, 
+        float similarityBoost = 0.75f, 
+        float styleExaggeration = 0.3f)
     {
+        string endpoint = $"{ttsEndpoint}/{voiceId}";
+        
         using (HttpClient client = new HttpClient())
         {
-            // Set the authorization header with the API key
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + openAIApiKey);
-            Debug.Log("TTS Manager: Sending TTS request");
-
-            // Create the request body
-            var requestBody = new TTSRequest
+            try
             {
-                model = model,
-                input = inputText,
-                voice = voice,
-                response_format = responseFormat,
-                speed = speed
-            };
+                Debug.Log($"API Key length: {elevenLabsApiKey?.Length}");
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Add("xi-api-key", elevenLabsApiKey.Trim());
+                Debug.Log("Headers set: xi-api-key header present: " + client.DefaultRequestHeaders.Contains("xi-api-key"));
 
-            // Serialize the request body to JSON
-            string jsonContent = JsonConvert.SerializeObject(requestBody);
-            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+                // Create the request body
+                var requestBody = new ElevenLabsTTSRequest
+                {
+                    text = inputText,
+                    model_id = modelId,
+                    voice_settings = new VoiceSettings
+                    {
+                        stability = stability,
+                        similarity_boost = similarityBoost,
+                        style_exaggeration = styleExaggeration
+                    }
+                };
 
-            // Send the POST request
-            HttpResponseMessage response = await client.PostAsync(ttsEndpoint, content);
+                // Serialize the request body to JSON
+                string jsonContent = JsonConvert.SerializeObject(requestBody);
+                var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-            if (response.IsSuccessStatusCode)
-            {
-                // If the request is successful, read the byte array of the audio data
-                // Debug.Log("TTS Manager: TTS request successful");
-                return await response.Content.ReadAsByteArrayAsync();
+                // Send the POST request
+                HttpResponseMessage response = await client.PostAsync(endpoint, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    // If the request is successful, read the byte array of the audio data
+                    return await response.Content.ReadAsByteArrayAsync();
+                }
+                else
+                {
+                    // Log error if the request fails
+                    string errorResponse = await response.Content.ReadAsStringAsync();
+                    Debug.LogError("Error with ElevenLabs TTS API: " + response.ReasonPhrase + "\nDetails: " + errorResponse);
+                    return null;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                // Log error if the request fails
-                string errorResponse = await response.Content.ReadAsStringAsync();
-                Debug.LogError("Error with TTS API: " + response.ReasonPhrase + "\nDetails: " + errorResponse);
+                Debug.LogError($"Exception in GetElevenLabsTTSAudio: {ex.Message}\nStack trace: {ex.StackTrace}");
                 return null;
             }
         }
@@ -133,6 +216,11 @@ public class TTSManager : MonoBehaviour
     {
         // Save the audio data as a .mp3 file locally
         string filePath = Path.Combine(Application.persistentDataPath, "audio.mp3");
+        if (File.Exists(filePath))
+        {
+            File.Delete(filePath);
+            Debug.Log("Deleted existing audio file");
+        }
         File.WriteAllBytes(filePath, audioData);
 
         // Start coroutine to load and play the audio file
@@ -169,13 +257,29 @@ public class TTSManager : MonoBehaviour
     }
 
     // Nested class to structure the TTS request body
-    public class TTSRequest
+    // public class TTSRequest
+    // {
+    //     public string model { get; set; }
+    //     public string input { get; set; }
+    //     public string voice { get; set; }
+    //     public string response_format { get; set; }
+    //     public float speed { get; set; }
+    // }
+
+    [Serializable]
+    public class ElevenLabsTTSRequest
     {
-        public string model { get; set; }
-        public string input { get; set; }
-        public string voice { get; set; }
-        public string response_format { get; set; }
-        public float speed { get; set; }
+        public string text { get; set; }
+        public string model_id { get; set; }
+        public VoiceSettings voice_settings { get; set; }
+    }
+
+    [Serializable]
+    public class VoiceSettings
+    {
+        public float stability { get; set; }
+        public float similarity_boost { get; set; }
+        public float style_exaggeration { get; set; }
     }
 
         private void UpdateAnimation(string message)
