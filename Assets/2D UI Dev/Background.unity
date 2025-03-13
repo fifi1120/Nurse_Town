@@ -671,22 +671,30 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Welcome to Nurse Town: Root Cause Analysis Simulation\n\nIn this simulation,
-    you will investigate a critical incident in a healthcare setting. Your objective
-    is to conduct interviews, analyze the root cause, and assess the results to improve
-    patient safety. Follow the steps below to complete your investigation.\nHow to
-    Play:\n\n    Learn About the Background\n        Begin by reviewing the incident
-    report to understand the situation.\n\n    Conduct Interviews\n        Speak
-    with different healthcare professionals involved in the incident.\n        You
-    must gather all relevant information before proceeding.\n\n    Complete the Interview
-    Process\n        Ensure all key individuals (e.g., Primary Nurse, Code Team,
-    Anesthesiologist) have been interviewed.\n        If any interviews are incomplete,
-    you must go back and conduct them before moving forward.\n\n    Upload Your Root
-    Cause Analysis (RCA)\n        Once all interviews are complete, upload your findings.\n\n   
-    Assess the Results\n        Review the analysis to determine the contributing
-    factors and possible solutions.\n\n    Evaluation\n        Your performance will
-    be assessed through formative and summative evaluations to gauge your understanding
-    and decision-making."
+  m_text: "The following paragraphs provide a comprehensive timeline of events during
+    the ICU event. You will be interviewed by a nurse who is conducting a Root Cause
+    Analysis. You should use this background to respond to any questions regarding
+    the scenario, including what occurred, when it happened, and how the team members
+    contributed to the outcome.\nIn the beginning, patients with pneumonia are admitted
+    for IV antibiotics (ceftriaxone). The patient, in good spirits, expects a short
+    hospital stay and praises the ED staff. The primary nurse performs the admission
+    assessment and places patient ID and allergy bands. However, due to confusion
+    from experience at another hospital, the nurse applies a blue wristband, mistakenly
+    believing it indicates a penicillin allergy (at this hospital, blue means DNR).\nAt
+    2 minutes, the patient suddenly experiences dizziness, difficulty breathing,
+    and throat swelling\u2014signs of anaphylaxis. The nurse halts the antibiotic
+    infusion and administers oxygen but receives no immediate assistance.\nAt 2.5
+    minutes, the patient becomes unresponsive, entering ventricular tachycardia.
+    The nurse calls a code and begins CPR.\nAt 3 minutes, the code team arrives.
+    The primary nurse provides a verbal report, including the patient\u2019s history
+    and the sequence of events leading to the arrest. The team prepares for defibrillation,
+    but a delay occurs when the ICU nurse notices the blue wristband and raises concerns
+    about the patient\u2019s code status.\nAt 5 minutes, While the primary nurse
+    searches for the patient\u2019s chart, the code team debates continuing resuscitation.
+    By the time the nurse returns, confirming the patient as full code, the patient\u2019s
+    heart rhythm has deteriorated to asystole.\nAs outcome, despite additional CPR
+    cycles, the patient is pronounced dead due to delayed defibrillation. An alternate
+    scenario allows for successful resuscitation but with irreversible brain damage.\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
