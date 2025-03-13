@@ -17,8 +17,11 @@ public class HelpPanelController : MonoBehaviour
     public void ShowHelpPanel()
     {
         helpPanel.SetActive(true);
+        helpPanel.transform.SetAsLastSibling(); // Move it to the top layer
         ShowInstructions();  // Default to Instructions
+
     }
+
 
     public void HideHelpPanel()
     {
