@@ -6,9 +6,21 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Start.unity
-    guid: 192df88765c26c2498faa9275420029e
+    path: Assets/2D UI Dev/Landing.unity
+    guid: a45ea7f5f5ddb4502b89d8d0a62d98ee
   - enabled: 1
-    path: Assets/Doctor's office/Scene/Demo.unity
-    guid: 43290de4958153940acb3d7ef6dd6a70
+    path: Assets/2D UI Dev/Background.unity
+    guid: 0b5e2d49918e74fc78a7da9066a42953
+  - enabled: 1
+    path: Assets/2D UI Dev/Game.unity
+    guid: baadf0607e63d4f44aedb22258990458
+  - enabled: 1
+    path: Assets/2D UI Dev/Demo.unity
+    guid: b2904eebf9ec9479284a7c596025d92e
+  - enabled: 1
+    path: Assets/2D UI Dev/Assessment.unity
+    guid: 30dcf2e44b8bd4d3186fc6007570c5ab
+  - enabled: 1
+    path: Assets/2D UI Dev/Instructions.unity
+    guid: d2a4aafdbd13a4528af239d61b2abef8
   m_configObjects: {}

@@ -47,7 +47,7 @@ public class sitPatientSpeech : MonoBehaviour
     void Start()
     {
         apiKey = EnvironmentLoader.GetEnvVariable("OPENAI_API_KEY");
-        // Debug.Log("Using APIKey:" + apiKey);
+        Debug.Log("Using APIKey:" + apiKey);
 
         // Initialize patient instructions and chat
         InitializePatientInstructions();
