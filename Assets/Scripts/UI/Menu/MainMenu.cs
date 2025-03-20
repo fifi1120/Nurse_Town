@@ -25,7 +25,7 @@ namespace UI.Menu
             _mainMenuCanvas = mainMenu.GetComponent<Canvas>();
             _creditsCanvas = credits.GetComponent<Canvas>();
             _loadingScreenCanvas = loadingScreen.GetComponent<Canvas>();
-            _creditsCanvas.enabled = false;
+            _creditsCanvas.enabled = false; 
             _loadingScreenCanvas.enabled = false;
             Menu.ButtonAction(startGameButton, NewGame);
             Menu.ButtonAction(creditsButton, Credits);

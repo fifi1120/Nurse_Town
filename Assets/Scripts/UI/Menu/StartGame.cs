@@ -17,6 +17,7 @@ namespace UI.Menu
         {
             _mainMenuCanvas = mainMenu.GetComponent<Canvas>();
             _creditsCanvas = startGame.GetComponent<Canvas>();
+             // Ensure the startGame canvas is initially disabled
         }
         
         public void Back()
