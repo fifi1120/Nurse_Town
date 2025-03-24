@@ -223,7 +223,8 @@ public class OpenAIRequest : MonoBehaviour
     {
         var requestObject = new
         {
-            model = "gpt-4-turbo-preview",
+            // model = "gpt-4-turbo-preview",
+            model = "gpt-4",
             messages = chatMessages,
             temperature = 0.7f,
             max_tokens = 1500
