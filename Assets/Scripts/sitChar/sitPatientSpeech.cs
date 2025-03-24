@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Linq;
 using System.Text.RegularExpressions;
+using uLipSync;
 
 public class sitPatientSpeech : MonoBehaviour
 {
@@ -29,6 +30,10 @@ public class sitPatientSpeech : MonoBehaviour
     private string patient1Instructions;
     private string patient2Instructions;
     private string patient3Instructions;
+
+    // solve 429 too many requests error
+    private bool isRequestInProgress = false;
+    private float requestCooldown = 1.0f;  
 
     void Awake()
     {
@@ -175,7 +180,15 @@ public class sitPatientSpeech : MonoBehaviour
         Debug.Log("NurseResponds: Starting...");
         chatMessages.Add(new Dictionary<string, string>() { { "role", "user" }, { "content", nurseMessage } });
         PrintChatMessage(chatMessages);
-        StartCoroutine(PostRequest());
+        // Only start a new request if one isn't already running
+        if (!isRequestInProgress)
+        {
+            StartCoroutine(PostRequest());
+        }
+        else
+        {
+            Debug.Log("Request in progress. Waiting for cooldown...");
+        }
 
         // Evaluate nurse's response
         scoringSystem.EvaluateNurseResponse(nurseMessage);
@@ -183,6 +196,7 @@ public class sitPatientSpeech : MonoBehaviour
 
     IEnumerator PostRequest()
     {
+        isRequestInProgress = true;
         Debug.Log("Building request body for chat completion...");
 
         string requestBody = BuildRequestBody();
@@ -213,6 +227,10 @@ public class sitPatientSpeech : MonoBehaviour
                 Debug.LogError("sitTTSManager instance not found.");
             }
         }
+
+        // Wait for cooldown before allowing another request
+        yield return new WaitForSeconds(requestCooldown);
+        isRequestInProgress = false;
     }
 
     private string BuildRequestBody()
