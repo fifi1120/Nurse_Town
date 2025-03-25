@@ -98,11 +98,11 @@ public class sitTTSManager : MonoBehaviour
         // }
         byte[] audioData = await GetElevenLabsTTSAudio(
             ttsText,
-            "Bz0vsNJm8uY1hbd4c4AE", // voice ID
+            "vcnmLMBATKgMN0IbjtXf", // voice ID
             "eleven_multilingual_v2", // Default model
-            0.4f,   // stability
+            0.5f,   // stability
             0.75f,  // similarity_boost
-            0.4f    // style_exaggeration
+            0.0f    // style_exaggeration
         );
         
         if (audioData != null)
