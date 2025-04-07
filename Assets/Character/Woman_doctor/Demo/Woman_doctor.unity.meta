@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Animations/AnimationTest/FacialTest.unity.meta
+guid: bfd79bcc5977d4efc8e1391018e9c5c9
+========
 guid: be17776d11108194098579425a638ea3
+>>>>>>>> 0f9a48d492d307f364452643df831f410391f6bf:Assets/Character/Woman_doctor/Demo/Woman_doctor.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

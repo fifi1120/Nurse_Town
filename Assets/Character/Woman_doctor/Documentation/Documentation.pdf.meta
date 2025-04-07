@@ -1,5 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scripts/Audio2Face.meta
+guid: 08775555c61844c0686431d1af44345b
+folderAsset: yes
+========
 guid: 4148fe6697a29e140aa6b8dde7c40ef2
+>>>>>>>> 0f9a48d492d307f364452643df831f410391f6bf:Assets/Character/Woman_doctor/Documentation/Documentation.pdf.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
