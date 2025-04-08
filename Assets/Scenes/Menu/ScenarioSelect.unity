@@ -5862,7 +5862,7 @@ MonoBehaviour:
   scenario3DescriptionCanvas: {fileID: 105985349}
   scenario4DescriptionCanvas: {fileID: 1612871530}
   scenario5DescriptionCanvas: {fileID: 1351638846}
-  loadingScreenCanvas: {fileID: 0}
+  loadingScreenCanvas: {fileID: 1581197062}
   scenario1Button: {fileID: 1801027452}
   scenario2Button: {fileID: 1245125373}
   scenario3Button: {fileID: 1351564225}
