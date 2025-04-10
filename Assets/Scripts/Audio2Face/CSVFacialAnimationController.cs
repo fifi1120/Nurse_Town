@@ -36,12 +36,16 @@ public class CSVFacialAnimationController : MonoBehaviour
     [Tooltip("Show debug logs for first few frames")]
     public bool showDebugLogs = true;
     
+    // Add a public property to check if animation is playing
+    public bool IsPlaying => isPlaying;
+    
     // Private variables
     private Dictionary<string, int> blendShapeMapping;
     private List<KeyValuePair<float, Dictionary<string, float>>> timeOrderedFrames;
     private AudioSource audioSource;
     private bool isPlaying = false;
     private float animationDuration = 0f;
+    private bool isInitialized = false;
 
     void Start()
     {
@@ -57,11 +61,16 @@ public class CSVFacialAnimationController : MonoBehaviour
             audioSource = GetComponent<AudioSource>();
         }
         
-        // Initialize the animation system
-        InitializeAnimation();
-        
-        // Start playing
-        StartCoroutine(PlayAnimation());
+        // Initialize the animation system if we have the required components
+        if (characterFace != null && animationCSV != null)
+        {
+            InitializeAnimation();
+            StartCoroutine(PlayAnimation());
+        }
+        else
+        {
+            Debug.LogWarning("CSVFacialAnimationController: Missing required components (Character Face or Animation CSV). Animation will not play.");
+        }
     }
     
     private void InitializeAnimation()
@@ -88,38 +97,50 @@ public class CSVFacialAnimationController : MonoBehaviour
         LoadAnimationFromCSV();
         
         // Sort frames by time
-        timeOrderedFrames.Sort((a, b) => a.Key.CompareTo(b.Key));
-        
-        // Calculate animation duration from the last time point
         if (timeOrderedFrames.Count > 0)
         {
+            timeOrderedFrames.Sort((a, b) => a.Key.CompareTo(b.Key));
+            
+            // Calculate animation duration from the last time point
             animationDuration = timeOrderedFrames[timeOrderedFrames.Count - 1].Key;
             Debug.Log($"Animation duration based on time points: {animationDuration} seconds");
             Debug.Log($"With playback speed of {playbackSpeed}x, animation will play in {animationDuration / playbackSpeed} seconds");
-        }
-        
-        Debug.Log($"Loaded {timeOrderedFrames.Count} frames of animation data");
-        Debug.Log($"Found {blendShapeMapping.Count} blendshape mappings");
-        
-        if (audioClip != null)
-        {
-            Debug.Log($"Audio duration: {audioClip.length} seconds");
-            float expectedAnimationPlaytime = animationDuration / playbackSpeed;
-            if (Math.Abs(audioClip.length - expectedAnimationPlaytime) > 1.0f)
+            
+            Debug.Log($"Loaded {timeOrderedFrames.Count} frames of animation data");
+            Debug.Log($"Found {blendShapeMapping.Count} blendshape mappings");
+            
+            if (audioClip != null)
             {
-                Debug.LogWarning($"Audio length ({audioClip.length}s) and expected animation playback time ({expectedAnimationPlaytime}s) differ significantly!");
-                Debug.LogWarning($"You may need to adjust the playbackSpeed parameter (currently {playbackSpeed}).");
-                
-                // Suggest a value
-                float suggestedSpeed = animationDuration / audioClip.length;
-                Debug.LogWarning($"Suggested playbackSpeed value: {suggestedSpeed}");
+                Debug.Log($"Audio duration: {audioClip.length} seconds");
+                float expectedAnimationPlaytime = animationDuration / playbackSpeed;
+                if (Math.Abs(audioClip.length - expectedAnimationPlaytime) > 1.0f)
+                {
+                    Debug.LogWarning($"Audio length ({audioClip.length}s) and expected animation playback time ({expectedAnimationPlaytime}s) differ significantly!");
+                    Debug.LogWarning($"You may need to adjust the playbackSpeed parameter (currently {playbackSpeed}).");
+                    
+                    // Suggest a value
+                    float suggestedSpeed = animationDuration / audioClip.length;
+                    Debug.LogWarning($"Suggested playbackSpeed value: {suggestedSpeed}");
+                }
             }
+            
+            isInitialized = true;
+        }
+        else
+        {
+            Debug.LogWarning("No animation frames loaded from CSV!");
         }
     }
     
     private void CreateBlendShapeMapping()
     {
         blendShapeMapping = new Dictionary<string, int>();
+        
+        if (characterFace == null || characterFace.sharedMesh == null)
+        {
+            Debug.LogError("Cannot create blendshape mapping: Character face or shared mesh is missing!");
+            return;
+        }
         
         // Get all available blendshapes in the mesh
         int blendShapeCount = characterFace.sharedMesh.blendShapeCount;
@@ -149,6 +170,12 @@ public class CSVFacialAnimationController : MonoBehaviour
     
     private void LoadAnimationFromCSV()
     {
+        if (animationCSV == null)
+        {
+            Debug.LogError("Cannot load animation: Animation CSV is missing!");
+            return;
+        }
+        
         // Parse CSV data
         string[] lines = animationCSV.text.Split('\n');
         
@@ -280,6 +307,12 @@ public class CSVFacialAnimationController : MonoBehaviour
     
     IEnumerator PlayAnimation()
     {
+        if (!isInitialized || timeOrderedFrames == null || timeOrderedFrames.Count == 0)
+        {
+            Debug.LogWarning("Cannot play animation: Animation data not initialized or empty!");
+            yield break;
+        }
+        
         // Reset all blendshapes first
         ResetBlendShapes();
         
@@ -329,6 +362,11 @@ public class CSVFacialAnimationController : MonoBehaviour
     
     private void ApplyFrameAtTime(float time)
     {
+        if (timeOrderedFrames == null || timeOrderedFrames.Count == 0)
+        {
+            return;
+        }
+        
         // Find the closest frame that's less than or equal to the current time
         int index = timeOrderedFrames.FindIndex(frame => frame.Key > time) - 1;
         
@@ -347,6 +385,11 @@ public class CSVFacialAnimationController : MonoBehaviour
     
     private void ApplyFrameData(Dictionary<string, float> frameData)
     {
+        if (characterFace == null || frameData == null || blendShapeMapping == null)
+        {
+            return;
+        }
+        
         int shapesApplied = 0;
         
         // Apply each blendshape value from the frame data
@@ -367,6 +410,11 @@ public class CSVFacialAnimationController : MonoBehaviour
     
     private void ResetBlendShapes()
     {
+        if (characterFace == null || characterFace.sharedMesh == null)
+        {
+            return;
+        }
+        
         // Reset all blendshapes to zero
         for (int i = 0; i < characterFace.sharedMesh.blendShapeCount; i++)
         {
@@ -378,7 +426,28 @@ public class CSVFacialAnimationController : MonoBehaviour
     public void RestartAnimation()
     {
         StopAllCoroutines();
-        StartCoroutine(PlayAnimation());
+        
+        if (characterFace != null && animationCSV != null)
+        {
+            // Re-initialize if needed
+            if (!isInitialized)
+            {
+                InitializeAnimation();
+            }
+            
+            if (isInitialized)
+            {
+                StartCoroutine(PlayAnimation());
+            }
+            else
+            {
+                Debug.LogWarning("Cannot restart animation: Animation data not initialized!");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Cannot restart animation: Missing required components!");
+        }
     }
     
     // Cleanup when script is disabled
@@ -396,7 +465,8 @@ public class CSVFacialAnimationController : MonoBehaviour
     // For debug visualization
     void OnGUI()
     {
-        if (showDebugLogs && isPlaying && timeOrderedFrames.Count > 0)
+        // Add proper null checks to prevent NullReferenceExceptions
+        if (showDebugLogs && isPlaying && isInitialized && timeOrderedFrames != null && timeOrderedFrames.Count > 0)
         {
             float elapsedTime = Time.time - Time.timeSinceLevelLoad + Time.deltaTime;
             GUI.Label(new Rect(10, 10, 300, 20), $"Animation Time: {elapsedTime:F2}s");
@@ -410,5 +480,11 @@ public class CSVFacialAnimationController : MonoBehaviour
             
             GUI.Label(new Rect(10, 50, 300, 20), $"Current Frame: {frameIndex} / {timeOrderedFrames.Count}");
         }
+    }
+    
+    // Add a public method to check if animation is still playing
+    public bool IsAnimationPlaying()
+    {
+        return isPlaying;
     }
 }
