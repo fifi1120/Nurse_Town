@@ -168,7 +168,7 @@ public class TTSManager : MonoBehaviour
         float similarityBoost = 0.75f, 
         float styleExaggeration = 0.3f)
     {
-        string endpoint = $"{ttsEndpoint}/{voiceId}";
+        string endpoint = $"{ttsEndpoint}/{voiceId}?output_format=pcm_16000";
         
         using (HttpClient client = new HttpClient())
         {
@@ -220,6 +220,41 @@ public class TTSManager : MonoBehaviour
         }
     }
     
+    private void AddWavHeaderAndSave(byte[] pcmData, string filePath, int sampleRate = 16000, int channels = 1)
+    {
+        using (var fileStream = new FileStream(filePath, FileMode.Create))
+        using (var writer = new BinaryWriter(fileStream))
+        {
+            // Calculate sizes
+            int dataSize = pcmData.Length;
+            int fileSize = dataSize + 36; // 36 = size of WAV header minus 8 bytes
+        
+            // RIFF header
+            writer.Write(Encoding.ASCII.GetBytes("RIFF"));
+            writer.Write(fileSize);
+            writer.Write(Encoding.ASCII.GetBytes("WAVE"));
+        
+            // Format chunk
+            writer.Write(Encoding.ASCII.GetBytes("fmt "));
+            writer.Write(16); // Chunk size
+            writer.Write((short)1); // Audio format (1 = PCM)
+            writer.Write((short)channels);
+            writer.Write(sampleRate);
+            writer.Write(sampleRate * channels * 2); // Byte rate (SampleRate * NumChannels * BitsPerSample/8)
+            writer.Write((short)(channels * 2)); // Block align (NumChannels * BitsPerSample/8)
+            writer.Write((short)16); // Bits per sample
+        
+            // Data chunk
+            writer.Write(Encoding.ASCII.GetBytes("data"));
+            writer.Write(dataSize);
+        
+            // Write the PCM data
+            writer.Write(pcmData);
+        }
+    
+        Debug.Log($"Saved WAV file with PCM data to: {filePath}");
+    }
+    
     // Method to process audio with Audio2Face
     private async void ProcessWithAudio2Face(byte[] audioData, string messageContent)
     {
@@ -228,15 +263,17 @@ public class TTSManager : MonoBehaviour
             Debug.Log("Starting Audio2Face processing...");
             
             // Save a copy of the audio for direct playback (we'll need this for emotion triggers)
-            string filePath = Path.Combine(Application.persistentDataPath, "audio.mp3");
+            string filePath = Path.Combine(Application.persistentDataPath, "audio.wav");
             if (File.Exists(filePath))
             {
                 File.Delete(filePath);
             }
-            File.WriteAllBytes(filePath, audioData);
             
+            AddWavHeaderAndSave(audioData, filePath);
+            byte[] wavData = File.ReadAllBytes(filePath);
+
             // Process the audio with Audio2Face
-            bool success = await audio2FaceManager.ProcessAudioForFacialAnimation(audioData);
+            bool success = await audio2FaceManager.ProcessAudioForFacialAnimation(wavData, messageContent);
             
             if (success)
             {
@@ -244,7 +281,7 @@ public class TTSManager : MonoBehaviour
                 
                 // Animation will be loaded by the Audio2FaceManager
                 // We just need to play the audio and handle emotion triggers
-                StartCoroutine(LoadAndPlayAudio(filePath, messageContent));
+                // StartCoroutine(LoadAndPlayAudio(filePath, messageContent));
             }
             else
             {
@@ -262,14 +299,15 @@ public class TTSManager : MonoBehaviour
     // Method to process and play the audio bytes received
     private void ProcessAudioBytes(byte[] audioData, string messageContent)
     {
-        // Save the audio data as a .mp3 file locally
-        string filePath = Path.Combine(Application.persistentDataPath, "audio.mp3");
+        // Save the audio data as a .wav file locally
+        string filePath = Path.Combine(Application.persistentDataPath, "audio.wav");
         if (File.Exists(filePath))
         {
             File.Delete(filePath);
             Debug.Log("Deleted existing audio file");
         }
-        File.WriteAllBytes(filePath, audioData);
+        // File.WriteAllBytes(filePath, audioData);
+        AddWavHeaderAndSave(audioData, filePath);
 
         // Start coroutine to load and play the audio file
         StartCoroutine(LoadAndPlayAudio(filePath, messageContent));
@@ -279,7 +317,7 @@ public class TTSManager : MonoBehaviour
     private IEnumerator LoadAndPlayAudio(string filePath, string messageContent)
     {
         // Create a UnityWebRequest to load the audio file
-        using UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip("file://" + filePath, AudioType.MPEG);
+        using UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip("file://" + filePath, AudioType.WAV);
         yield return www.SendWebRequest();
 
         if (www.result == UnityWebRequest.Result.Success)
@@ -291,6 +329,12 @@ public class TTSManager : MonoBehaviour
             
             // Update animation based on emotion code
             UpdateAnimation(messageContent);
+            
+            float waitTime = audioClip.length + 0.5f;
+            Debug.Log($"Audio playing, will wait {waitTime} seconds for completion");
+            yield return new WaitForSeconds(waitTime);
+        
+            Debug.Log("Audio playback completed");
         }
         else
         {
@@ -331,8 +375,14 @@ public class TTSManager : MonoBehaviour
         public float style_exaggeration { get; set; }
     }
 
-    private void UpdateAnimation(string message)
+    public void UpdateAnimation(string message)
     {
+        if (animationController == null)
+        {
+            Debug.LogWarning("Cannot update animation: animationController is null");
+            return;
+        }
+        
         Match match = Regex.Match(message, @"\[([0-9]|10)\]$");
         if (match.Success)
         {

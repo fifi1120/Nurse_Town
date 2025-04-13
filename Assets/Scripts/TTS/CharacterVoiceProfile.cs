@@ -42,5 +42,5 @@ public class CharacterVoiceProfile : ScriptableObject
     
     [Range(0.5f, 2.0f)]
     [Tooltip("Animation scaling for facial movements. Higher values make expressions more pronounced.")]
-    public float animationScale = 1.5f;
+    public float animationScale = 1f;
 }
