@@ -13,19 +13,51 @@ using System.Text.RegularExpressions;
 
 public class TTSManager : MonoBehaviour
 {
-    public static TTSManager Instance { get; private set; } // 单例实例
+    public static TTSManager Instance { get; private set; }
 
-    public AudioSource audioSource; // Reference to the AudioSource where the speech will be played.
+    [Header("Audio Settings")]
+    [Tooltip("Reference to the AudioSource where the speech will be played")]
+    public AudioSource audioSource;
 
-    // private string openAIApiKey; // API key for OpenAI
-    private string elevenLabsApiKey; // API key for Eleven Labs
-    // private static readonly string ttsEndpoint = "https://api.openai.com/v1/audio/speech"; // Endpoint for TTS
+    [Header("TTS Configuration")]
+    [Tooltip("API key for ElevenLabs (loaded from environment variable by default)")]
+    [SerializeField] private string elevenLabsApiKey;
+    
+    [Tooltip("Voice ID for ElevenLabs")]
+    public string voiceId = "Bz0vsNJm8uY1hbd4c4AE";
+    
+    [Tooltip("Model ID for ElevenLabs")]
+    public string modelId = "eleven_multilingual_v2";
+    
+    [Header("Voice Settings")]
+    [Range(0f, 1f)]
+    [Tooltip("Stability value (0-1)")]
+    public float stability = 0.4f;
+    
+    [Range(0f, 1f)]
+    [Tooltip("Similarity boost value (0-1)")]
+    public float similarityBoost = 0.75f;
+    
+    [Range(0f, 1f)]
+    [Tooltip("Style exaggeration value (0-1)")]
+    public float styleExaggeration = 0.3f;
+    
+    [Header("Audio2Face Integration")]
+    [Tooltip("Whether to use Audio2Face for facial animation")]
+    public bool useAudio2Face = true;
+    
+    [Tooltip("Whether to delete cached audio files after use")]
+    public bool deleteCachedFiles = true;
+    
+    // API endpoints
     private static readonly string ttsEndpoint = "https://api.elevenlabs.io/v1/text-to-speech";
-    private const bool deleteCachedFile = true; // Flag to determine if the audio file should be deleted after playing
-    // for animation
+    
+    // Component references
     private CharacterAnimationController animationController;
     private BloodEffectController bloodEffectController;  
     private BloodTextController bloodTextController;
+    private Audio2FaceManager audio2FaceManager;
+    
     void Awake()
     {
         if (Instance == null)
@@ -42,19 +74,39 @@ public class TTSManager : MonoBehaviour
 
     void Start()
     {
-        // Load the API key securely, for example, from environment variables or a secure storage
-        // openAIApiKey = EnvironmentLoader.GetEnvVariable("OPENAI_API_KEY");
-        elevenLabsApiKey = EnvironmentLoader.GetEnvVariable("ELEVENLABS_API_KEY");
-        Debug.Log("TTS Manager: API key loaded");
+        // Load the API key from environment variables if not set manually
+        if (string.IsNullOrEmpty(elevenLabsApiKey))
+        {
+            elevenLabsApiKey = EnvironmentLoader.GetEnvVariable("ELEVENLABS_API_KEY");
+            Debug.Log("TTS Manager: API key loaded from environment variable");
+        }
+        
+        // Get references to required components
         animationController = GetComponent<CharacterAnimationController>();
         
+        // Find the Audio2FaceManager if we're using it
+        if (useAudio2Face)
+        {
+            audio2FaceManager = FindObjectOfType<Audio2FaceManager>();
+            if (audio2FaceManager == null)
+            {
+                Debug.LogWarning("Audio2FaceManager not found in the scene. Audio2Face integration disabled.");
+                useAudio2Face = false;
+            }
+            else
+            {
+                Debug.Log("Audio2Face integration enabled");
+            }
+        }
+        
         // Find the blood effect in the UI
-        bloodEffectController = GameObject.FindObjectOfType<BloodEffectController>();
+        bloodEffectController = FindObjectOfType<BloodEffectController>();
         if (bloodEffectController == null)
         {
             Debug.LogError("BloodEffectController not found in the scene. Make sure it exists in the UI!");
         }
-        bloodTextController = GameObject.FindObjectOfType<BloodTextController>();
+        
+        bloodTextController = FindObjectOfType<BloodTextController>();
         if (bloodTextController == null)
         {
             Debug.LogError("BloodTextController not found in the scene. Make sure it exists in the UI!");
@@ -78,30 +130,28 @@ public class TTSManager : MonoBehaviour
             ttsText = text.Substring(0, text.Length - 3).Trim();
         }
 
-        // Get audio data from OpenAI's TTS service
-    //     byte[] audioData = await GetTTSAudio(ttsText, "tts-1", "nova", "mp3", 1.0f);
-    //     if (audioData != null)
-    //     {
-    //         ProcessAudioBytes(audioData, text); // Pass original text for animation
-    //     }
-    //     else
-    //     {
-    //         Debug.LogError("TTS Manager: Failed to get audio data");
-    //     }
-
-    // Get audio data from ElevenLabs TTS service
+        // Get audio data from ElevenLabs TTS service
         byte[] audioData = await GetElevenLabsTTSAudio(
             ttsText,
-            "Bz0vsNJm8uY1hbd4c4AE", // voice ID 
-            "eleven_multilingual_v2", // Default model
-            0.4f,   // stability
-            0.75f,  // similarity_boost
-            0.3f    // style_exaggeration
+            voiceId,
+            modelId,
+            stability,
+            similarityBoost,
+            styleExaggeration
         );
         
         if (audioData != null)
         {
-            ProcessAudioBytes(audioData, text); // Pass original text for animation
+            if (useAudio2Face && audio2FaceManager != null)
+            {
+                // Process with Audio2Face
+                ProcessWithAudio2Face(audioData, text);
+            }
+            else
+            {
+                // Fallback to direct audio playback with emotion code
+                ProcessAudioBytes(audioData, text);
+            }
         }
         else
         {
@@ -109,47 +159,6 @@ public class TTSManager : MonoBehaviour
         }
     }
 
-    // // Method to get TTS audio from OpenAI
-    // private async Task<byte[]> GetTTSAudio(string inputText, string model, string voice, string responseFormat = "mp3", float speed = 1.0f)
-    // {
-    //     using (HttpClient client = new HttpClient())
-    //     {
-    //         // Set the authorization header with the API key
-    //         client.DefaultRequestHeaders.Add("Authorization", "Bearer " + openAIApiKey);
-    //         Debug.Log("TTS Manager: Sending TTS request");
-
-    //         // Create the request body
-    //         var requestBody = new TTSRequest
-    //         {
-    //             model = model,
-    //             input = inputText,
-    //             voice = voice,
-    //             response_format = responseFormat,
-    //             speed = speed
-    //         };
-
-    //         // Serialize the request body to JSON
-    //         string jsonContent = JsonConvert.SerializeObject(requestBody);
-    //         var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-
-    //         // Send the POST request
-    //         HttpResponseMessage response = await client.PostAsync(ttsEndpoint, content);
-
-    //         if (response.IsSuccessStatusCode)
-    //         {
-    //             // If the request is successful, read the byte array of the audio data
-    //             // Debug.Log("TTS Manager: TTS request successful");
-    //             return await response.Content.ReadAsByteArrayAsync();
-    //         }
-    //         else
-    //         {
-    //             // Log error if the request fails
-    //             string errorResponse = await response.Content.ReadAsStringAsync();
-    //             Debug.LogError("Error with TTS API: " + response.ReasonPhrase + "\nDetails: " + errorResponse);
-    //             return null;
-    //         }
-    //     }
-    // }
     // Method to get TTS audio from ElevenLabs
     private async Task<byte[]> GetElevenLabsTTSAudio(
         string inputText, 
@@ -159,7 +168,7 @@ public class TTSManager : MonoBehaviour
         float similarityBoost = 0.75f, 
         float styleExaggeration = 0.3f)
     {
-        string endpoint = $"{ttsEndpoint}/{voiceId}";
+        string endpoint = $"{ttsEndpoint}/{voiceId}?output_format=pcm_16000";
         
         using (HttpClient client = new HttpClient())
         {
@@ -210,18 +219,95 @@ public class TTSManager : MonoBehaviour
             }
         }
     }
+    
+    private void AddWavHeaderAndSave(byte[] pcmData, string filePath, int sampleRate = 16000, int channels = 1)
+    {
+        using (var fileStream = new FileStream(filePath, FileMode.Create))
+        using (var writer = new BinaryWriter(fileStream))
+        {
+            // Calculate sizes
+            int dataSize = pcmData.Length;
+            int fileSize = dataSize + 36; // 36 = size of WAV header minus 8 bytes
+        
+            // RIFF header
+            writer.Write(Encoding.ASCII.GetBytes("RIFF"));
+            writer.Write(fileSize);
+            writer.Write(Encoding.ASCII.GetBytes("WAVE"));
+        
+            // Format chunk
+            writer.Write(Encoding.ASCII.GetBytes("fmt "));
+            writer.Write(16); // Chunk size
+            writer.Write((short)1); // Audio format (1 = PCM)
+            writer.Write((short)channels);
+            writer.Write(sampleRate);
+            writer.Write(sampleRate * channels * 2); // Byte rate (SampleRate * NumChannels * BitsPerSample/8)
+            writer.Write((short)(channels * 2)); // Block align (NumChannels * BitsPerSample/8)
+            writer.Write((short)16); // Bits per sample
+        
+            // Data chunk
+            writer.Write(Encoding.ASCII.GetBytes("data"));
+            writer.Write(dataSize);
+        
+            // Write the PCM data
+            writer.Write(pcmData);
+        }
+    
+        Debug.Log($"Saved WAV file with PCM data to: {filePath}");
+    }
+    
+    // Method to process audio with Audio2Face
+    private async void ProcessWithAudio2Face(byte[] audioData, string messageContent)
+    {
+        try
+        {
+            Debug.Log("Starting Audio2Face processing...");
+            
+            // Save a copy of the audio for direct playback (we'll need this for emotion triggers)
+            string filePath = Path.Combine(Application.persistentDataPath, "audio.wav");
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+            
+            AddWavHeaderAndSave(audioData, filePath);
+            byte[] wavData = File.ReadAllBytes(filePath);
+
+            // Process the audio with Audio2Face
+            bool success = await audio2FaceManager.ProcessAudioForFacialAnimation(wavData, messageContent);
+            
+            if (success)
+            {
+                Debug.Log("Audio2Face processing completed successfully");
+                
+                // Animation will be loaded by the Audio2FaceManager
+                // We just need to play the audio and handle emotion triggers
+                // StartCoroutine(LoadAndPlayAudio(filePath, messageContent));
+            }
+            else
+            {
+                Debug.LogError("Audio2Face processing failed. Falling back to direct audio playback.");
+                ProcessAudioBytes(audioData, messageContent);
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Error in ProcessWithAudio2Face: {ex.Message}");
+            ProcessAudioBytes(audioData, messageContent);
+        }
+    }
 
     // Method to process and play the audio bytes received
     private void ProcessAudioBytes(byte[] audioData, string messageContent)
     {
-        // Save the audio data as a .mp3 file locally
-        string filePath = Path.Combine(Application.persistentDataPath, "audio.mp3");
+        // Save the audio data as a .wav file locally
+        string filePath = Path.Combine(Application.persistentDataPath, "audio.wav");
         if (File.Exists(filePath))
         {
             File.Delete(filePath);
             Debug.Log("Deleted existing audio file");
         }
-        File.WriteAllBytes(filePath, audioData);
+        // File.WriteAllBytes(filePath, audioData);
+        AddWavHeaderAndSave(audioData, filePath);
 
         // Start coroutine to load and play the audio file
         StartCoroutine(LoadAndPlayAudio(filePath, messageContent));
@@ -231,17 +317,24 @@ public class TTSManager : MonoBehaviour
     private IEnumerator LoadAndPlayAudio(string filePath, string messageContent)
     {
         // Create a UnityWebRequest to load the audio file
-        using UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip("file://" + filePath, AudioType.MPEG);
+        using UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip("file://" + filePath, AudioType.WAV);
         yield return www.SendWebRequest();
 
         if (www.result == UnityWebRequest.Result.Success)
         {
             // If the file is successfully loaded, get the audio clip and play it
             AudioClip audioClip = DownloadHandlerAudioClip.GetContent(www);
-            // Debug.Log("Audio clip loaded successfully");
             audioSource.clip = audioClip;
             audioSource.Play();
+            
+            // Update animation based on emotion code
             UpdateAnimation(messageContent);
+            
+            float waitTime = audioClip.length + 0.5f;
+            Debug.Log($"Audio playing, will wait {waitTime} seconds for completion");
+            yield return new WaitForSeconds(waitTime);
+        
+            Debug.Log("Audio playback completed");
         }
         else
         {
@@ -250,21 +343,21 @@ public class TTSManager : MonoBehaviour
         }
 
         // Optionally delete the file after playing
-        if (deleteCachedFile)
+        if (deleteCachedFiles && File.Exists(filePath))
         {
-            File.Delete(filePath);
+            // Wait until audio is done playing to delete
+            yield return new WaitForSeconds(audioSource.clip.length + 0.5f);
+            try
+            {
+                File.Delete(filePath);
+                Debug.Log("Deleted cached audio file");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning($"Failed to delete cached audio file: {ex.Message}");
+            }
         }
     }
-
-    // Nested class to structure the TTS request body
-    // public class TTSRequest
-    // {
-    //     public string model { get; set; }
-    //     public string input { get; set; }
-    //     public string voice { get; set; }
-    //     public string response_format { get; set; }
-    //     public float speed { get; set; }
-    // }
 
     [Serializable]
     public class ElevenLabsTTSRequest
@@ -282,8 +375,14 @@ public class TTSManager : MonoBehaviour
         public float style_exaggeration { get; set; }
     }
 
-        private void UpdateAnimation(string message)
+    public void UpdateAnimation(string message)
     {
+        if (animationController == null)
+        {
+            Debug.LogWarning("Cannot update animation: animationController is null");
+            return;
+        }
+        
         Match match = Regex.Match(message, @"\[([0-9]|10)\]$");
         if (match.Success)
         {
@@ -323,9 +422,10 @@ public class TTSManager : MonoBehaviour
                     break;
                 case 10:
                     animationController.PlayBloodPressure();
-                    bloodEffectController.SetBloodVisibility(true);
-                    bloodTextController.SetBloodTextVisibility(true);
-
+                    if (bloodEffectController != null)
+                        bloodEffectController.SetBloodVisibility(true);
+                    if (bloodTextController != null)
+                        bloodTextController.SetBloodTextVisibility(true);
                     break;
             }
         }
