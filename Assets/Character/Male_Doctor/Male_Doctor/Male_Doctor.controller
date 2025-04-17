@@ -42,7 +42,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7345289874603697450, guid: a583484b0c9e545a0820b704a31110c4, type: 3}
+  m_Motion: {fileID: -203655887218126122, guid: 85aa8918a2cff40529abcf5b216774f4, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -54,7 +54,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Male_Nurse
+  m_Name: Male_Doctor
   serializedVersion: 5
   m_AnimatorParameters: []
   m_AnimatorLayers:
