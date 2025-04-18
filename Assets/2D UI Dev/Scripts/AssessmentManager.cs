@@ -135,6 +135,7 @@ public class AssessmentManager : MonoBehaviour
             var response = JObject.Parse(request.downloadHandler.text);
             string gptFeedback = response["choices"][0]["message"]["content"].ToString();
             resultText.text = "Formative GPT Feedback:\n\n" + gptFeedback;
+            Debug.Log(gptFeedback);
         }
     }
 
@@ -264,6 +265,7 @@ Keep your tone constructive and focused on growth. Limit your response to 2–3 
             var response = JObject.Parse(request.downloadHandler.text);
             string gptFeedback = response["choices"][0]["message"]["content"].ToString();
             resultText.text = "Summative GPT Feedback:\n\n" + gptFeedback;
+            Debug.Log(gptFeedback);
         }
     }
 
