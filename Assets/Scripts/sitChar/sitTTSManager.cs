@@ -100,9 +100,9 @@ public class sitTTSManager : MonoBehaviour
             ttsText,
             "vcnmLMBATKgMN0IbjtXf", // voice ID
             "eleven_multilingual_v2", // Default model
-            0.5f,   // stability
+            0.4f,   // stability
             0.75f,  // similarity_boost
-            0.0f    // style_exaggeration
+            0.2f    // style_exaggeration
         );
         
         if (audioData != null)
