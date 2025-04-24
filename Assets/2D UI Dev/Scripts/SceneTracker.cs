@@ -57,14 +57,14 @@ public class SceneTracker : MonoBehaviour
     public void FinishGame()
     {
         // Clear all scene visit data
-        // for (int i = 1; i <= totalScenes; i++)
-        // {
-        //     PlayerPrefs.DeleteKey("Scene" + i);
-        // }
+       for (int i = 1; i <= totalScenes; i++)
+       {
+            PlayerPrefs.DeleteKey("Scene" + i);
+       }
 
-        // PlayerPrefs.Save(); // Ensure changes are saved
+       PlayerPrefs.Save(); // Ensure changes are saved
 
         // Optionally, reload the game scene or go to a main menu
-        SceneManager.LoadScene("Assessment");
+        SceneManager.LoadScene("2D UI Dev/Assessment");
     }
 }
