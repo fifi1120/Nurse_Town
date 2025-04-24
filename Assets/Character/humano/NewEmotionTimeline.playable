@@ -1,6 +1,48 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-1977671083703381992
+--- !u!114 &-7842407892304115968
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4f77d777dcd06448813d3a34c46357a, type: 3}
+  m_Name: SlatePlayableAsset
+  m_EditorClassIdentifier: 
+  m_Version: 1
+  m_AutoClipName: 1
+  m_SceneNumber: 1
+  m_ShotName: Angry
+  m_TakeNumber: 3
+  m_Description: 
+  m_Directory: Assets\Takes\A2F-Model\Angry
+  m_Take: {fileID: 11400000, guid: ae607c0e12f981645a29ff1c26011eaf, type: 2}
+  m_IterationBase: {fileID: 0}
+--- !u!114 &-6633455279238456953
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4f77d777dcd06448813d3a34c46357a, type: 3}
+  m_Name: SlatePlayableAsset
+  m_EditorClassIdentifier: 
+  m_Version: 1
+  m_AutoClipName: 1
+  m_SceneNumber: 1
+  m_ShotName: Sad
+  m_TakeNumber: 5
+  m_Description: 
+  m_Directory: Assets\Takes\A2F-Model\Sad
+  m_Take: {fileID: 11400000, guid: 5f8501d63a9cf274298fbe81c975bdc4, type: 2}
+  m_IterationBase: {fileID: 0}
+--- !u!114 &-2925362171901773513
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -10,7 +52,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0aaaf47297bb7d0428ff07e8b289b3b7, type: 3}
-  m_Name: Take Recorder Track
+  m_Name: Mad Track
   m_EditorClassIdentifier: 
   m_Version: 3
   m_AnimClip: {fileID: 0}
@@ -22,10 +64,171 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 2.2
+    m_Start: 3.933333333332
     m_ClipIn: 0
-    m_Asset: {fileID: 3134215244787891527}
-    m_Duration: 3.633333333332
+    m_Asset: {fileID: 6815516538989402265}
+    m_Duration: 2.899999999999
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: -2925362171901773513}
+    m_EaseInDuration: 0
+    m_EaseOutDuration: 0
+    m_BlendInDuration: 0
+    m_BlendOutDuration: 0
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 0
+    m_PreExtrapolationMode: 0
+    m_PostExtrapolationTime: 0
+    m_PreExtrapolationTime: 3.933333333332
+    m_DisplayName: Mad
+  - m_Version: 1
+    m_Start: 6.833333333331
+    m_ClipIn: 0
+    m_Asset: {fileID: 4669566670078371957}
+    m_Duration: 2.750000000002334
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: -2925362171901773513}
+    m_EaseInDuration: 0
+    m_EaseOutDuration: 0
+    m_BlendInDuration: 0
+    m_BlendOutDuration: 0
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 0
+    m_PreExtrapolationMode: 0
+    m_PostExtrapolationTime: Infinity
+    m_PreExtrapolationTime: 0
+    m_DisplayName: Mad
+  m_Markers:
+    m_Objects: []
+--- !u!114 &-1977671083703381992
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0aaaf47297bb7d0428ff07e8b289b3b7, type: 3}
+  m_Name: Sad Track
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 0
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: 11400000}
+  m_Children: []
+  m_Clips:
+  - m_Version: 1
+    m_Start: 0
+    m_ClipIn: 0
+    m_Asset: {fileID: -6633455279238456953}
+    m_Duration: 3.933333333332
     m_TimeScale: 1
     m_ParentTrack: {fileID: -1977671083703381992}
     m_EaseInDuration: 0
@@ -88,7 +291,7 @@ MonoBehaviour:
     m_PostExtrapolationMode: 0
     m_PreExtrapolationMode: 0
     m_PostExtrapolationTime: Infinity
-    m_PreExtrapolationTime: 2.2
+    m_PreExtrapolationTime: 0
     m_DisplayName: Sad
   m_Markers:
     m_Objects: []
@@ -107,13 +310,128 @@ MonoBehaviour:
   m_Version: 0
   m_Tracks:
   - {fileID: -1977671083703381992}
+  - {fileID: -2925362171901773513}
+  - {fileID: 3985189978921649355}
   m_FixedDuration: 0
   m_EditorSettings:
     m_Framerate: 60
     m_ScenePreview: 1
   m_DurationMode: 0
   m_MarkerTrack: {fileID: 0}
---- !u!114 &3134215244787891527
+--- !u!114 &3985189978921649355
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0aaaf47297bb7d0428ff07e8b289b3b7, type: 3}
+  m_Name: Angry Track
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 0
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: 11400000}
+  m_Children: []
+  m_Clips:
+  - m_Version: 1
+    m_Start: 9.583333333333334
+    m_ClipIn: 1.2166666666666668
+    m_Asset: {fileID: -7842407892304115968}
+    m_Duration: 2.416666666666666
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: 3985189978921649355}
+    m_EaseInDuration: 0
+    m_EaseOutDuration: 0
+    m_BlendInDuration: 0
+    m_BlendOutDuration: 0
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 0
+    m_PreExtrapolationMode: 0
+    m_PostExtrapolationTime: Infinity
+    m_PreExtrapolationTime: 9.583333333333334
+    m_DisplayName: Angry
+  m_Markers:
+    m_Objects: []
+--- !u!114 &4669566670078371957
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4f77d777dcd06448813d3a34c46357a, type: 3}
+  m_Name: SlatePlayableAsset(Clone)
+  m_EditorClassIdentifier: 
+  m_Version: 1
+  m_AutoClipName: 1
+  m_SceneNumber: 1
+  m_ShotName: Mad
+  m_TakeNumber: 4
+  m_Description: 
+  m_Directory: Assets\Takes\A2F-Model\Angry
+  m_Take: {fileID: 11400000, guid: 03b5552f5e90f5d429469a83389547da, type: 2}
+  m_IterationBase: {fileID: 0}
+--- !u!114 &6815516538989402265
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -128,9 +446,9 @@ MonoBehaviour:
   m_Version: 1
   m_AutoClipName: 1
   m_SceneNumber: 1
-  m_ShotName: Sad
-  m_TakeNumber: 2
+  m_ShotName: Mad
+  m_TakeNumber: 4
   m_Description: 
-  m_Directory: Assets\Takes
-  m_Take: {fileID: 11400000, guid: 9803681f96a9bca4ca1fca96ead71fe5, type: 2}
+  m_Directory: Assets\Takes\A2F-Model\Angry
+  m_Take: {fileID: 11400000, guid: 03b5552f5e90f5d429469a83389547da, type: 2}
   m_IterationBase: {fileID: 0}
