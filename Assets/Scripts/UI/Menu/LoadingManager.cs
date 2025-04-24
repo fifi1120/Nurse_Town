@@ -21,17 +21,23 @@ namespace UI.Menu
             }
 
             _loadingScreen = GameObject.Find("Loading Screen").GetComponent<Canvas>();
+            _loadingScreen.enabled = false; // Ensure loading screen is initially hidden
         }
 
         public void LoadScene(string sceneName)
         {
-            _loadingScreen.enabled = true;
-            StartCoroutine(LoadingScreen(sceneName));
+            Debug.Log("Loading scene: " + sceneName);
+            SceneManager.LoadScene(sceneName);
+            //_loadingScreen.enabled = true;
+            //Debug.Log("Loading scene: " + sceneName);
+            //StartCoroutine(LoadingScreen(sceneName));
         }
 
         public IEnumerator LoadingScreen(string sceneName)
         {
+            Debug.Log("Starting loading coroutine for scene: " + sceneName);
             yield return new WaitForSeconds(2);
+            Debug.Log("Loading scene after delay: " + sceneName);
             SceneManager.LoadScene(sceneName);
         }
     }
