@@ -98,7 +98,7 @@ public class AssessmentManager : MonoBehaviour
             new Dictionary<string, string>()
             {
                 { "role", "system" },
-                { "content", formativePrompt }
+                { "content", nursePatientPrompt }
             },
             new Dictionary<string, string>()
             {
@@ -173,6 +173,10 @@ At the end, provide:
 - Suggestions for improvement to strengthen future interview performance
 
 Keep your tone constructive and focused on growth. Limit your response to 2–3 paragraphs.";
+
+    private readonly string nursePatientPrompt = @"
+    
+";
 
 
     // ===== SUMMATIVE =====
