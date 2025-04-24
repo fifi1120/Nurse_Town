@@ -73,6 +73,11 @@ public class CharacterAnimationController : MonoBehaviour
         StartCoroutine(PlayAnimationWithDelay("blood_pre"));
     }
 
+    public void PlaySittingTalking()
+    {
+        StartCoroutine(PlayAnimationWithDelay("sitting_talking"));
+    }
+
     private IEnumerator PlayAnimationWithDelay(string triggerName, float delay = 0.0f)
     {
         yield return new WaitForSeconds(delay);

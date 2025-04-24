@@ -28,9 +28,9 @@ public class sitCharacterAnimationController : MonoBehaviour
         StartCoroutine(PlayAnimationWithDelay("bend"));
     }
 
-    public void PlayRubArm()
+    public void PlaySittingTalking()
     {
-        StartCoroutine(PlayAnimationWithDelay("rub_arm"));
+        StartCoroutine(PlayAnimationWithDelay("sitting_talking"));
     }
 
     public void PlaySad()
@@ -41,6 +41,11 @@ public class sitCharacterAnimationController : MonoBehaviour
     public void PlayThumbUp()
     {
         StartCoroutine(PlayAnimationWithDelay("thumb_up"));
+    }
+
+    public void PlayRubArm()
+    {
+        StartCoroutine(PlayAnimationWithDelay("rub_arm"));
     }
 
     public void PlayBloodPressure()
