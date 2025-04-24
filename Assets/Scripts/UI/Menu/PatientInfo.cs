@@ -1,28 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PatientInfo : MonoBehaviour
+namespace UI.Menu
 {
-    public GameObject patientInfoUI;
-    
-    void Update()
+    public class PatientInfo : MonoBehaviour
     {
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            ToggleInfo();
-        }
-    }
+        public GameObject patientInfoUI;
     
-    public void ToggleInfo()
-    {
-        if (patientInfoUI.activeSelf)
+        void Update()
         {
-            patientInfoUI.SetActive(false);
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                ToggleInfo();
+            }
         }
-        else
+    
+        public void ToggleInfo()
         {
-            patientInfoUI.SetActive(true);
+            if (patientInfoUI.activeSelf)
+            {
+                patientInfoUI.SetActive(false);
+            }
+            else
+            {
+                patientInfoUI.SetActive(true);
+            }
         }
     }
 }

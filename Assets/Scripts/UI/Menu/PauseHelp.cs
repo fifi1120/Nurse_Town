@@ -22,7 +22,8 @@ namespace UI.Menu
         
         public void Back()
         {
-            Menu.CanvasTransition(_helpCanvas, _pauseMenuCanvas);
+            //Menu.CanvasTransition(_helpCanvas, _pauseMenuCanvas);
+            helpMenu.SetActive(false);
         }
         
     }

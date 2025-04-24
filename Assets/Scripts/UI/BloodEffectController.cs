@@ -6,7 +6,7 @@ public class BloodEffectController : MonoBehaviour
 {
     private Image blood;
     [SerializeField] private bool showBlood = false;
-    private TextMeshProUGUI bloodPressureText;
+    [SerializeField] private TextMeshProUGUI bloodPressureText;
     private BloodTextController bloodTextController;
     private bool canMeasureBloodPressure = false;
     private Animator animator;
@@ -33,7 +33,7 @@ public class BloodEffectController : MonoBehaviour
         }
         
         // Find blood pressure text by name
-        bloodPressureText = GameObject.Find("bloodPresureVal").GetComponent<TextMeshProUGUI>();
+        //bloodPressureText = GameObject.Find("BloodPressureVal").GetComponent<TextMeshProUGUI>();
         if (bloodPressureText == null)
         {
             Debug.LogError("Blood Pressure Text component not found!");

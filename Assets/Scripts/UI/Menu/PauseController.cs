@@ -34,6 +34,7 @@ namespace UI.Menu
         
         public void ToggleHelpCanvas()
         {
+            Debug.Log("Toggling Help Canvas");
             if (HelpMenu.activeSelf)
             {
                 PauseMenuUI.SetActive(true);
@@ -48,6 +49,7 @@ namespace UI.Menu
         
         public void ToggleCreditsCanvas()
         {
+            Debug.Log("Toggling Credits Canvas");
             if (CreditsMenu.activeSelf)
             {
                 PauseMenuUI.SetActive(true);
