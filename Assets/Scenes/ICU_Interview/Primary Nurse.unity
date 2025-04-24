@@ -764,211 +764,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6539981273831597825, guid: 7e673cca58c00e340ae0ad23b9df3aa1, type: 3}
   m_PrefabInstance: {fileID: 604708033}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &205968823
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 205968822}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 803036e25dc9a4af3bbdd6099156c9a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pythonScriptPath: /Users/zhenzhenqin/Documents/NEU/Research/facial-animation/Audio2Face-3D-Samples/scripts/audio2face_3d_api_client/nim_a2f_3d_client.py
-  configDirectoryPath: /Users/zhenzhenqin/Documents/NEU/Research/facial-animation/Audio2Face-3D-Samples/scripts/audio2face_3d_api_client/config
-  pythonExecutablePath: /Users/zhenzhenqin/Documents/NEU/Research/facial-animation/.venv/bin/python3
-  apiKey: 
-  autoLoadAnimation: 1
-  deleteTempFiles: 1
-  animationPlaybackSpeed: 1
-  animationStrength: 1
-  animationController: {fileID: 0}
-  ttsManager: {fileID: 0}
-  autoProcessTTS: 1
-  selectedModel: 1
-  useDummyData: 0
-  detailedLogging: 0
---- !u!114 &205968824
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 205968822}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f25d1f3bd3884457bbbdc65d720d7828, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterFace: {fileID: 1970073611}
-  animationCSV: {fileID: 0}
-  audioClip: {fileID: 0}
-  animationScale: 1.5
-  timeColumnName: timeCode
-  playbackSpeed: 30
-  timeOffset: 0
-  showDebugLogs: 1
---- !u!114 &205968825
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 205968822}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8f3d7951de144f7ab4ec98e25a72c6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  voiceProfile: {fileID: 11400000, guid: 68aa74f585a584e3aa8f18eb2e597eb6, type: 2}
-  ttsManager: {fileID: 0}
-  facialAnimationController: {fileID: 0}
---- !u!82 &205968826
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 205968822}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
---- !u!114 &205968827
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 205968822}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce8ecf81683e248b482557efcab54ff2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  audioSource: {fileID: 205968826}
-  elevenLabsApiKey: 
-  voiceId: Bz0vsNJm8uY1hbd4c4AE
-  modelId: eleven_multilingual_v2
-  stability: 0.4
-  similarityBoost: 0.75
-  styleExaggeration: 0.3
-  useAudio2Face: 1
-  deleteCachedFiles: 1
---- !u!114 &205968828
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 205968822}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c429ac217b364750aad5bbe98d6bd92, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  apiUrl: https://api.openai.com/v1/chat/completions
-  apiKey: 
---- !u!114 &205968829
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 205968822}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d87a583482af435996cc006517c6753b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  transcriptText: {fileID: 505715652}
 --- !u!114 &205968830
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -981,6 +776,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d868d52bed1a2c42a34e7d3178d98df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &205968834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 205968822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fffe6308518444963a514a80a495ca19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  apiUrl: https://api.openai.com/v1/chat/completions
 --- !u!850595691 &306488781
 LightingSettings:
   m_ObjectHideFlags: 0
@@ -1318,19 +1126,7 @@ PrefabInstance:
       addedObject: {fileID: 1964921983}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9b997e3550602be488102d973be80b4d, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1964921982}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9b997e3550602be488102d973be80b4d, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1964921981}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9b997e3550602be488102d973be80b4d, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1964921980}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9b997e3550602be488102d973be80b4d, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1964921979}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9b997e3550602be488102d973be80b4d, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1964921978}
+      addedObject: {fileID: 1964921985}
   m_SourcePrefab: {fileID: 100100000, guid: 9b997e3550602be488102d973be80b4d, type: 3}
 --- !u!1 &505715651
 GameObject:
@@ -1688,7 +1484,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: humano-a2f-test-3
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6426094527701746819, guid: 7e673cca58c00e340ae0ad23b9df3aa1, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -1697,25 +1494,7 @@ PrefabInstance:
       addedObject: {fileID: 205968830}
     - targetCorrespondingSourceObject: {fileID: 6539981273831597825, guid: 7e673cca58c00e340ae0ad23b9df3aa1, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 205968829}
-    - targetCorrespondingSourceObject: {fileID: 6539981273831597825, guid: 7e673cca58c00e340ae0ad23b9df3aa1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 205968828}
-    - targetCorrespondingSourceObject: {fileID: 6539981273831597825, guid: 7e673cca58c00e340ae0ad23b9df3aa1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 205968827}
-    - targetCorrespondingSourceObject: {fileID: 6539981273831597825, guid: 7e673cca58c00e340ae0ad23b9df3aa1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 205968826}
-    - targetCorrespondingSourceObject: {fileID: 6539981273831597825, guid: 7e673cca58c00e340ae0ad23b9df3aa1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 205968825}
-    - targetCorrespondingSourceObject: {fileID: 6539981273831597825, guid: 7e673cca58c00e340ae0ad23b9df3aa1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 205968824}
-    - targetCorrespondingSourceObject: {fileID: 6539981273831597825, guid: 7e673cca58c00e340ae0ad23b9df3aa1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 205968823}
+      addedObject: {fileID: 205968834}
   m_SourcePrefab: {fileID: 100100000, guid: 7e673cca58c00e340ae0ad23b9df3aa1, type: 3}
 --- !u!1001 &791535431
 PrefabInstance:
@@ -3091,89 +2870,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9b997e3550602be488102d973be80b4d, type: 3}
   m_PrefabInstance: {fileID: 487560475}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1964921978
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1964921976}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f25d1f3bd3884457bbbdc65d720d7828, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterFace: {fileID: 0}
-  animationCSV: {fileID: 0}
-  audioClip: {fileID: 0}
-  animationScale: 1.5
-  timeColumnName: timeCode
-  playbackSpeed: 30
-  timeOffset: 0
-  showDebugLogs: 1
---- !u!114 &1964921979
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1964921976}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8f3d7951de144f7ab4ec98e25a72c6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  voiceProfile: {fileID: 11400000, guid: 68aa74f585a584e3aa8f18eb2e597eb6, type: 2}
-  ttsManager: {fileID: 0}
-  facialAnimationController: {fileID: 0}
---- !u!114 &1964921980
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1964921976}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce8ecf81683e248b482557efcab54ff2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  audioSource: {fileID: 0}
-  elevenLabsApiKey: 
-  voiceId: Bz0vsNJm8uY1hbd4c4AE
-  modelId: eleven_multilingual_v2
-  stability: 0.4
-  similarityBoost: 0.75
-  styleExaggeration: 0.3
-  useAudio2Face: 1
-  deleteCachedFiles: 1
---- !u!114 &1964921981
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1964921976}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c429ac217b364750aad5bbe98d6bd92, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  apiUrl: https://api.openai.com/v1/chat/completions
-  apiKey: 
---- !u!114 &1964921982
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1964921976}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d87a583482af435996cc006517c6753b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  transcriptText: {fileID: 505715652}
 --- !u!114 &1964921983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3186,11 +2882,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d868d52bed1a2c42a34e7d3178d98df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!137 &1970073611 stripped
-SkinnedMeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 1511022246124084255, guid: 7e673cca58c00e340ae0ad23b9df3aa1, type: 3}
-  m_PrefabInstance: {fileID: 604708033}
+--- !u!114 &1964921985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1964921976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fffe6308518444963a514a80a495ca19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  apiUrl: https://api.openai.com/v1/chat/completions
 --- !u!1 &2046175700
 GameObject:
   m_ObjectHideFlags: 0
