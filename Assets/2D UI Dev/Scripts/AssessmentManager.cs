@@ -48,6 +48,7 @@ public class AssessmentManager : MonoBehaviour
         // Try to load from PlayerPrefs
         string storedScript = PlayerPrefs.GetString("interviewScripts", "");
         playerTranscript = string.IsNullOrWhiteSpace(storedScript) ? exampleScripts : storedScript;
+        Debug.Log(playerTranscript);
     }
 
     // Load API key directly from a .env file
@@ -103,7 +104,7 @@ public class AssessmentManager : MonoBehaviour
             new Dictionary<string, string>()
             {
                 { "role", "user" },
-                { "content", $"Here is the student’s interview transcript:\n\n{playerInput}" }
+                { "content", $"Here is the nurse's conversation transcript:\n\n{playerInput}" }
             }
         };
 
@@ -174,16 +175,16 @@ At the end, provide:
 
 Keep your tone constructive and focused on growth. Limit your response to 2–3 paragraphs.";
 
-    private readonly string nursePatientPrompt = $"You are an expert nursing instructor. For each of the nurse's respoonse, evaluate based on the criteria provided.\n\n" +
+    private readonly string nursePatientPrompt = $"You are an expert nursing instructor. For round of interaction, evaluate based on the criteria provided.\n\n" +
                         "Scoring Criteria:\n" +
                         "- Deduct 1 point if medical jargon was used without explanation.\n" +
                         "- Add 2 points if the nurse mentions printing a list or sending an email.\n" +
                         "- Add 2 points if the nurse mentions the \"0-10 scale\" of pain or other discomfort.\n\n" +
-                        "Anything like that that feels reasonable" +
-                        "Provide the output in the following format:" +
-                        "Nurse response:" +
-                        "Points change:" +
-                        "Reason"
+                        "Anything like that that feels reasonable, like 'you are goiong to die' should be -10 points " +
+                        "Provide the output in the following format (1 set for each round of conversation):" +
+                        "Nurse response: (what nurse said in this round of conversation)" +
+                        "Points change: (points added or deducted based on this round)" +
+                        "Reason: (reason for addition or deduction, suggestions for improvement)"
 ;
 
 
