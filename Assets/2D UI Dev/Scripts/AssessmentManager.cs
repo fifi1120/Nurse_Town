@@ -174,9 +174,17 @@ At the end, provide:
 
 Keep your tone constructive and focused on growth. Limit your response to 2–3 paragraphs.";
 
-    private readonly string nursePatientPrompt = @"
-    
-";
+    private readonly string nursePatientPrompt = $"You are an expert nursing instructor. For each of the nurse's respoonse, evaluate based on the criteria provided.\n\n" +
+                        "Scoring Criteria:\n" +
+                        "- Deduct 1 point if medical jargon was used without explanation.\n" +
+                        "- Add 2 points if the nurse mentions printing a list or sending an email.\n" +
+                        "- Add 2 points if the nurse mentions the \"0-10 scale\" of pain or other discomfort.\n\n" +
+                        "Anything like that that feels reasonable" +
+                        "Provide the output in the following format:" +
+                        "Nurse response:" +
+                        "Points change:" +
+                        "Reason"
+;
 
 
     // ===== SUMMATIVE =====

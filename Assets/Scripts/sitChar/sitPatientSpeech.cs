@@ -33,7 +33,9 @@ public class sitPatientSpeech : MonoBehaviour
 
     // solve 429 too many requests error
     private bool isRequestInProgress = false;
-    private float requestCooldown = 1.0f;  
+    private float requestCooldown = 1.0f;
+
+    private string transcript = "";
 
     void Awake()
     {
@@ -180,6 +182,10 @@ public class sitPatientSpeech : MonoBehaviour
         Debug.Log("NurseResponds: Starting...");
         chatMessages.Add(new Dictionary<string, string>() { { "role", "user" }, { "content", nurseMessage } });
         PrintChatMessage(chatMessages);
+
+        // Append user input to transcript
+        transcript += $"User:\n{nurseMessage}\n\n";
+
         // Only start a new request if one isn't already running
         if (!isRequestInProgress)
         {
@@ -216,6 +222,13 @@ public class sitPatientSpeech : MonoBehaviour
 
             chatMessages.Add(new Dictionary<string, string>() { { "role", "assistant" }, { "content", messageContent } });
             PrintChatMessage(chatMessages);
+
+            // Append assistant response to transcript
+            transcript += $"Patient:\n{messageContent}\n\n";
+
+            // Save updated transcript to PlayerPrefs
+            PlayerPrefs.SetString("interviewScripts", transcript);
+            PlayerPrefs.Save();  // Optional but good to include explicitly
 
             // Play the response using TTS
             if (sitTTSManager.Instance != null)
