@@ -28,9 +28,18 @@ namespace UI.Menu
         {
             //welcomeCanvas = GameObject.Find("Welcome Canvas").GetComponent<Canvas>();
             //scenarioSelectCanvas = GameObject.Find("Scenario Canvas").GetComponent<Canvas>();
+
+            if (PlayerPrefs.GetInt("Scene" + 1, 0) == 1) // Check if visited
+            {
+                welcomeCanvas.enabled = false;
+                scenarioSelectCanvas.enabled = true;
+            }
+            else
+            {
+                welcomeCanvas.enabled = true;
+                scenarioSelectCanvas.enabled = false;
+            }
             
-            welcomeCanvas.enabled = true;
-            scenarioSelectCanvas.enabled = false;
             scenario1DescriptionCanvas.enabled = false;
             scenario2DescriptionCanvas.enabled = false;
             scenario3DescriptionCanvas.enabled = false;

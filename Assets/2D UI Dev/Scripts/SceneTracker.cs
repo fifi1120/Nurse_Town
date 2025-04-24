@@ -12,7 +12,7 @@ public class SceneTracker : MonoBehaviour
     private void Start()
     {
         finishButton.interactable = false; // Disable Finish at start
-
+        
         // Load previously visited scenes from PlayerPrefs
         for (int i = 1; i <= totalScenes; i++)
         {
@@ -21,6 +21,8 @@ public class SceneTracker : MonoBehaviour
                 visitedScenes.Add("Scene" + i);
             }
         }
+        
+        Debug.Log("Visited Scenes Count: " + visitedScenes.Count);
 
         CheckCompletion(); // Check if all scenes were visited
     }

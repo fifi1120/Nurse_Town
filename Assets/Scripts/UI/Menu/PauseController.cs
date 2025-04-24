@@ -64,6 +64,7 @@ namespace UI.Menu
         
         public void ReturnToMainMenu()
         {
+            Time.timeScale = 1;
             UnityEngine.SceneManagement.SceneManager.LoadScene("Scenes/Menu/Start");
         }
         
