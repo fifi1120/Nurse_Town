@@ -26,11 +26,11 @@ public class SceneTracker : MonoBehaviour
     }
 
     // Separate functions for each scene (to be assigned in Unity Inspector)
-    public void LoadScene1() { MarkSceneAsVisited("Scenes/InterviewScene", 1); }
-    public void LoadScene2() { MarkSceneAsVisited("Scenes/InterviewScene", 2); }
-    public void LoadScene3() { MarkSceneAsVisited("Scenes/InterviewScene", 3); }
-    public void LoadScene4() { MarkSceneAsVisited("Scenes/InterviewScene", 4); }
-    public void LoadScene5() { MarkSceneAsVisited("Scenes/InterviewScene", 5); }
+    public void LoadScene1() { MarkSceneAsVisited("Scenes/ICU_Interview/Primary Nurse", 1); }
+    public void LoadScene2() { MarkSceneAsVisited("Scenes/ICU_Interview/ICU Anesthesiologist", 2); }
+    public void LoadScene3() { MarkSceneAsVisited("Scenes/ICU_Interview/MedicalStudent", 3); }
+    public void LoadScene4() { MarkSceneAsVisited("Scenes/ICU_Interview/ICU Nurse", 4); }
+    public void LoadScene5() { MarkSceneAsVisited("Scenes/ICU_Interview/ICU Doctor", 5); }
 
     private void MarkSceneAsVisited(string sceneName, int sceneNumber)
     {
