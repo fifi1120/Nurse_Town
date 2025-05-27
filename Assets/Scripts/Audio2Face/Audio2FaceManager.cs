@@ -40,13 +40,13 @@ public class Audio2FaceManager : MonoBehaviour
     
     [Header("Local Python Script Configuration")]
     [Tooltip("Path to the Python script")]
-    public string pythonScriptPath = "/Users/zhenzhenqin/Documents/NEU/Research/facial-animation/Audio2Face-3D-Samples/scripts/audio2face_3d_api_client/nim_a2f_3d_client.py";
+    public string pythonScriptPath = "E:\\Unity\\Unity Projects\\Audio2Face-3D-Samples\\scripts\\audio2face_3d_api_client\\nim_a2f_3d_client.py";
     
     [Tooltip("Path to the config directory")]
-    public string configDirectoryPath = "/Users/zhenzhenqin/Documents/NEU/Research/facial-animation/Audio2Face-3D-Samples/scripts/audio2face_3d_api_client/config";
+    public string configDirectoryPath = "E:\\Unity\\Unity Projects\\Audio2Face-3D-Samples\\scripts\\audio2face_3d_api_client\\config";
     
     [Tooltip("Path to Python executable")]
-    public string pythonExecutablePath = "/Users/zhenzhenqin/Documents/NEU/Research/facial-animation/.venv/bin/python3";
+    public string pythonExecutablePath = "E:\\Unity\\Unity Projects\\a2f\\.venv\\Scripts\\python.exe";
     
     [Header("NVIDIA API Configuration")]
     [Tooltip("Your NVIDIA API key")]
