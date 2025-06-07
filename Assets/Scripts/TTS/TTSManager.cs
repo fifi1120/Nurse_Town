@@ -122,6 +122,8 @@ public class TTSManager : MonoBehaviour
             return;
         }
 
+        text = "aaaaa";
+
         // Strip emotion code for TTS but keep original text for animation
         string ttsText = text;
         Match match = Regex.Match(text, @"\[([0-9]|10)\]$");
