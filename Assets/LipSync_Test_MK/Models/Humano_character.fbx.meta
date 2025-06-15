@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 3752d2f058d114552bfeda1708b73e48
+guid: 4ecbc4812050242b9bf96d03ddb403ed
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,13 +7,8 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Humano_Rig-Plus_080-4620_01_T-LOD1_4K
-    second: {fileID: 2100000, guid: 2d32ba257b38242be8406bbda72b022d, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Humano_Rig-Plus_080-4620_Hair_01_T-LOD1_2K
-    second: {fileID: 2100000, guid: 89cc51e736cfa48cdb1ed0b090da1431, type: 2}
+      name: Humano_Rig_080-4620_01_T-LOD0_8K.001
+    second: {fileID: 2100000, guid: b0b6af59d152f4043b6f081bce43eb55, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
