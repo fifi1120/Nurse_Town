@@ -15,7 +15,7 @@ MonoBehaviour:
   m_Version: 1
   m_AutoClipName: 1
   m_SceneNumber: 1
-  m_ShotName: Angry
+  m_ShotName: Pain
   m_TakeNumber: 3
   m_Description: 
   m_Directory: Assets\Takes\A2F-Model\Angry
@@ -42,7 +42,7 @@ MonoBehaviour:
   m_Directory: Assets\Takes\A2F-Model\Sad
   m_Take: {fileID: 11400000, guid: 5f8501d63a9cf274298fbe81c975bdc4, type: 2}
   m_IterationBase: {fileID: 0}
---- !u!114 &-6480721073252421806
+--- !u!114 &-3617489782897107044
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -51,39 +51,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4f77d777dcd06448813d3a34c46357a, type: 3}
-  m_Name: SlatePlayableAsset(Clone)(Clone)(Clone)
+  m_Script: {fileID: 11500000, guid: 0aaaf47297bb7d0428ff07e8b289b3b7, type: 3}
+  m_Name: Stretch Arms Track
   m_EditorClassIdentifier: 
-  m_Version: 1
-  m_AutoClipName: 1
-  m_SceneNumber: 1
-  m_ShotName: Mad
-  m_TakeNumber: 4
-  m_Description: 
-  m_Directory: Assets\Takes\Mad
-  m_Take: {fileID: 11400000, guid: 03b5552f5e90f5d429469a83389547da, type: 2}
-  m_IterationBase: {fileID: 0}
---- !u!114 &-4153445047181071748
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4f77d777dcd06448813d3a34c46357a, type: 3}
-  m_Name: SlatePlayableAsset(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)
-  m_EditorClassIdentifier: 
-  m_Version: 1
-  m_AutoClipName: 1
-  m_SceneNumber: 1
-  m_ShotName: Smile
-  m_TakeNumber: 10
-  m_Description: 
-  m_Directory: Assets\Takes
-  m_Take: {fileID: 11400000, guid: e2a5d8c6cdd93bc4a87049d3b08997c0, type: 2}
-  m_IterationBase: {fileID: 0}
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 1
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: 11400000}
+  m_Children: []
+  m_Clips: []
+  m_Markers:
+    m_Objects: []
 --- !u!114 &-2925362171901773513
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -99,14 +80,14 @@ MonoBehaviour:
   m_Version: 3
   m_AnimClip: {fileID: 0}
   m_Locked: 0
-  m_Muted: 0
+  m_Muted: 1
   m_CustomPlayableFullTypename: 
   m_Curves: {fileID: 0}
-  m_Parent: {fileID: 1802824859742944497}
+  m_Parent: {fileID: 11400000}
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 3.433333333333333
+    m_Start: 0
     m_ClipIn: 0
     m_Asset: {fileID: 6815516538989402265}
     m_Duration: 2.899999999999
@@ -171,150 +152,12 @@ MonoBehaviour:
     m_Recordable: 0
     m_PostExtrapolationMode: 0
     m_PreExtrapolationMode: 0
-    m_PostExtrapolationTime: 0
-    m_PreExtrapolationTime: 3.433333333333333
-    m_DisplayName: Mad
-  - m_Version: 1
-    m_Start: 6.333333333332331
-    m_ClipIn: 0
-    m_Asset: {fileID: 4669566670078371957}
-    m_Duration: 2.750000000002334
-    m_TimeScale: 1
-    m_ParentTrack: {fileID: -2925362171901773513}
-    m_EaseInDuration: 0
-    m_EaseOutDuration: 0
-    m_BlendInDuration: 0
-    m_BlendOutDuration: 0
-    m_MixInCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_MixOutCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_BlendInCurveMode: 0
-    m_BlendOutCurveMode: 0
-    m_ExposedParameterNames: []
-    m_AnimationCurves: {fileID: 0}
-    m_Recordable: 0
-    m_PostExtrapolationMode: 0
-    m_PreExtrapolationMode: 0
-    m_PostExtrapolationTime: 4.833333333333332
-    m_PreExtrapolationTime: 0
-    m_DisplayName: Mad
-  - m_Version: 1
-    m_Start: 13.916666666667997
-    m_ClipIn: 0
-    m_Asset: {fileID: -6480721073252421806}
-    m_Duration: 2.750000000002334
-    m_TimeScale: 1
-    m_ParentTrack: {fileID: -2925362171901773513}
-    m_EaseInDuration: 0
-    m_EaseOutDuration: 0
-    m_BlendInDuration: 0
-    m_BlendOutDuration: 0
-    m_MixInCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_MixOutCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_BlendInCurveMode: 0
-    m_BlendOutCurveMode: 0
-    m_ExposedParameterNames: []
-    m_AnimationCurves: {fileID: 0}
-    m_Recordable: 0
-    m_PostExtrapolationMode: 0
-    m_PreExtrapolationMode: 0
     m_PostExtrapolationTime: Infinity
-    m_PreExtrapolationTime: 4.833333333333332
+    m_PreExtrapolationTime: 0
     m_DisplayName: Mad
   m_Markers:
     m_Objects: []
---- !u!114 &-2651614369367897033
+--- !u!114 &-2199920740917331031
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -323,18 +166,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4f77d777dcd06448813d3a34c46357a, type: 3}
-  m_Name: SlatePlayableAsset(Clone)(Clone)
+  m_Script: {fileID: 11500000, guid: 0aaaf47297bb7d0428ff07e8b289b3b7, type: 3}
+  m_Name: Nod Track
   m_EditorClassIdentifier: 
-  m_Version: 1
-  m_AutoClipName: 1
-  m_SceneNumber: 1
-  m_ShotName: Angry
-  m_TakeNumber: 3
-  m_Description: 
-  m_Directory: Assets\Takes\Angry
-  m_Take: {fileID: 11400000, guid: ae607c0e12f981645a29ff1c26011eaf, type: 2}
-  m_IterationBase: {fileID: 0}
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 1
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: 11400000}
+  m_Children: []
+  m_Clips: []
+  m_Markers:
+    m_Objects: []
 --- !u!114 &-1977671083703381992
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -350,10 +195,10 @@ MonoBehaviour:
   m_Version: 3
   m_AnimClip: {fileID: 0}
   m_Locked: 0
-  m_Muted: 0
+  m_Muted: 1
   m_CustomPlayableFullTypename: 
   m_Curves: {fileID: 0}
-  m_Parent: {fileID: 1802824859742944497}
+  m_Parent: {fileID: 11400000}
   m_Children: []
   m_Clips:
   - m_Version: 1
@@ -427,6 +272,29 @@ MonoBehaviour:
     m_DisplayName: Sad
   m_Markers:
     m_Objects: []
+--- !u!114 &-1604610230346257548
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0aaaf47297bb7d0428ff07e8b289b3b7, type: 3}
+  m_Name: Stretch Neck Track
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 1
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: 11400000}
+  m_Children: []
+  m_Clips: []
+  m_Markers:
+    m_Objects: []
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -441,14 +309,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Version: 0
   m_Tracks:
-  - {fileID: 1802824859742944497}
+  - {fileID: 8314759159539549829}
+  - {fileID: 8554099793095674180}
+  - {fileID: 2616054349450615579}
+  - {fileID: 701092562573633977}
+  - {fileID: -2199920740917331031}
+  - {fileID: 3985189978921649355}
+  - {fileID: -1977671083703381992}
+  - {fileID: -3617489782897107044}
+  - {fileID: -1604610230346257548}
+  - {fileID: -2925362171901773513}
   m_FixedDuration: 0
   m_EditorSettings:
     m_Framerate: 60
     m_ScenePreview: 1
   m_DurationMode: 0
   m_MarkerTrack: {fileID: 0}
---- !u!114 &1670305059300868054
+--- !u!114 &701092562573633977
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -457,42 +334,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4f77d777dcd06448813d3a34c46357a, type: 3}
-  m_Name: SlatePlayableAsset(Clone)(Clone)
-  m_EditorClassIdentifier: 
-  m_Version: 1
-  m_AutoClipName: 1
-  m_SceneNumber: 1
-  m_ShotName: Smile
-  m_TakeNumber: 10
-  m_Description: 
-  m_Directory: Assets\Takes
-  m_Take: {fileID: 11400000, guid: e2a5d8c6cdd93bc4a87049d3b08997c0, type: 2}
-  m_IterationBase: {fileID: 0}
---- !u!114 &1802824859742944497
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0fc6f5187a81dc47999eefade6f0935, type: 3}
-  m_Name: Track Group
+  m_Script: {fileID: 11500000, guid: 0aaaf47297bb7d0428ff07e8b289b3b7, type: 3}
+  m_Name: Shrug Track
   m_EditorClassIdentifier: 
   m_Version: 3
   m_AnimClip: {fileID: 0}
   m_Locked: 0
-  m_Muted: 0
+  m_Muted: 1
   m_CustomPlayableFullTypename: 
   m_Curves: {fileID: 0}
   m_Parent: {fileID: 11400000}
-  m_Children:
-  - {fileID: -1977671083703381992}
-  - {fileID: -2925362171901773513}
-  - {fileID: 3985189978921649355}
-  - {fileID: 2616054349450615579}
+  m_Children: []
   m_Clips: []
   m_Markers:
     m_Objects: []
@@ -506,7 +358,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0aaaf47297bb7d0428ff07e8b289b3b7, type: 3}
-  m_Name: Take Recorder Track
+  m_Name: Happy Track
   m_EditorClassIdentifier: 
   m_Version: 3
   m_AnimClip: {fileID: 0}
@@ -514,289 +366,13 @@ MonoBehaviour:
   m_Muted: 1
   m_CustomPlayableFullTypename: 
   m_Curves: {fileID: 0}
-  m_Parent: {fileID: 1802824859742944497}
+  m_Parent: {fileID: 11400000}
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 12
+    m_Start: 0
     m_ClipIn: 0
     m_Asset: {fileID: 6591005994078544340}
-    m_Duration: 2.7333333333333325
-    m_TimeScale: 1
-    m_ParentTrack: {fileID: 2616054349450615579}
-    m_EaseInDuration: 0
-    m_EaseOutDuration: 0
-    m_BlendInDuration: 0
-    m_BlendOutDuration: 0
-    m_MixInCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_MixOutCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_BlendInCurveMode: 0
-    m_BlendOutCurveMode: 0
-    m_ExposedParameterNames: []
-    m_AnimationCurves: {fileID: 0}
-    m_Recordable: 0
-    m_PostExtrapolationMode: 0
-    m_PreExtrapolationMode: 0
-    m_PostExtrapolationTime: 0
-    m_PreExtrapolationTime: 12
-    m_DisplayName: Smile
-  - m_Version: 1
-    m_Start: 14.733333333333333
-    m_ClipIn: 0
-    m_Asset: {fileID: 1670305059300868054}
-    m_Duration: 2.7333333333333325
-    m_TimeScale: 1
-    m_ParentTrack: {fileID: 2616054349450615579}
-    m_EaseInDuration: 0
-    m_EaseOutDuration: 0
-    m_BlendInDuration: 0
-    m_BlendOutDuration: 0
-    m_MixInCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_MixOutCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_BlendInCurveMode: 0
-    m_BlendOutCurveMode: 0
-    m_ExposedParameterNames: []
-    m_AnimationCurves: {fileID: 0}
-    m_Recordable: 0
-    m_PostExtrapolationMode: 0
-    m_PreExtrapolationMode: 0
-    m_PostExtrapolationTime: 0
-    m_PreExtrapolationTime: 0
-    m_DisplayName: Smile
-  - m_Version: 1
-    m_Start: 17.466666666666665
-    m_ClipIn: 0
-    m_Asset: {fileID: 5556323375700298348}
-    m_Duration: 2.7333333333333325
-    m_TimeScale: 1
-    m_ParentTrack: {fileID: 2616054349450615579}
-    m_EaseInDuration: 0
-    m_EaseOutDuration: 0
-    m_BlendInDuration: 0
-    m_BlendOutDuration: 0
-    m_MixInCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_MixOutCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_BlendInCurveMode: 0
-    m_BlendOutCurveMode: 0
-    m_ExposedParameterNames: []
-    m_AnimationCurves: {fileID: 0}
-    m_Recordable: 0
-    m_PostExtrapolationMode: 0
-    m_PreExtrapolationMode: 0
-    m_PostExtrapolationTime: 0
-    m_PreExtrapolationTime: 0
-    m_DisplayName: Smile
-  - m_Version: 1
-    m_Start: 20.2
-    m_ClipIn: 0
-    m_Asset: {fileID: -4153445047181071748}
-    m_Duration: 2.7333333333333325
-    m_TimeScale: 1
-    m_ParentTrack: {fileID: 2616054349450615579}
-    m_EaseInDuration: 0
-    m_EaseOutDuration: 0
-    m_BlendInDuration: 0
-    m_BlendOutDuration: 0
-    m_MixInCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_MixOutCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_BlendInCurveMode: 0
-    m_BlendOutCurveMode: 0
-    m_ExposedParameterNames: []
-    m_AnimationCurves: {fileID: 0}
-    m_Recordable: 0
-    m_PostExtrapolationMode: 0
-    m_PreExtrapolationMode: 0
-    m_PostExtrapolationTime: 0
-    m_PreExtrapolationTime: 0
-    m_DisplayName: Smile
-  - m_Version: 1
-    m_Start: 22.933333333333
-    m_ClipIn: 0
-    m_Asset: {fileID: 7381689387437172724}
     m_Duration: 2.7333333333333325
     m_TimeScale: 1
     m_ParentTrack: {fileID: 2616054349450615579}
@@ -874,7 +450,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0aaaf47297bb7d0428ff07e8b289b3b7, type: 3}
-  m_Name: Angry Track
+  m_Name: Writhing Track
   m_EditorClassIdentifier: 
   m_Version: 3
   m_AnimClip: {fileID: 0}
@@ -882,11 +458,11 @@ MonoBehaviour:
   m_Muted: 0
   m_CustomPlayableFullTypename: 
   m_Curves: {fileID: 0}
-  m_Parent: {fileID: 1802824859742944497}
+  m_Parent: {fileID: 11400000}
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 9.083333333334664
+    m_Start: 0
     m_ClipIn: 1.2166666666666668
     m_Asset: {fileID: -7842407892304115968}
     m_Duration: 2.416666666666666
@@ -951,122 +527,11 @@ MonoBehaviour:
     m_Recordable: 0
     m_PostExtrapolationMode: 0
     m_PreExtrapolationMode: 0
-    m_PostExtrapolationTime: 0
-    m_PreExtrapolationTime: 9.083333333334664
-    m_DisplayName: Angry
-  - m_Version: 1
-    m_Start: 11.50000000000133
-    m_ClipIn: 1.2166666666666668
-    m_Asset: {fileID: -2651614369367897033}
-    m_Duration: 2.416666666666666
-    m_TimeScale: 1
-    m_ParentTrack: {fileID: 3985189978921649355}
-    m_EaseInDuration: 0
-    m_EaseOutDuration: 0
-    m_BlendInDuration: 0
-    m_BlendOutDuration: 0
-    m_MixInCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_MixOutCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_BlendInCurveMode: 0
-    m_BlendOutCurveMode: 0
-    m_ExposedParameterNames: []
-    m_AnimationCurves: {fileID: 0}
-    m_Recordable: 0
-    m_PostExtrapolationMode: 0
-    m_PreExtrapolationMode: 0
     m_PostExtrapolationTime: Infinity
     m_PreExtrapolationTime: 0
-    m_DisplayName: Angry
+    m_DisplayName: Pain
   m_Markers:
     m_Objects: []
---- !u!114 &4669566670078371957
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4f77d777dcd06448813d3a34c46357a, type: 3}
-  m_Name: SlatePlayableAsset(Clone)
-  m_EditorClassIdentifier: 
-  m_Version: 1
-  m_AutoClipName: 1
-  m_SceneNumber: 1
-  m_ShotName: Mad
-  m_TakeNumber: 4
-  m_Description: 
-  m_Directory: Assets\Takes\A2F-Model\Angry
-  m_Take: {fileID: 11400000, guid: 03b5552f5e90f5d429469a83389547da, type: 2}
-  m_IterationBase: {fileID: 0}
---- !u!114 &5556323375700298348
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4f77d777dcd06448813d3a34c46357a, type: 3}
-  m_Name: SlatePlayableAsset(Clone)(Clone)(Clone)(Clone)
-  m_EditorClassIdentifier: 
-  m_Version: 1
-  m_AutoClipName: 1
-  m_SceneNumber: 1
-  m_ShotName: Smile
-  m_TakeNumber: 10
-  m_Description: 
-  m_Directory: Assets\Takes
-  m_Take: {fileID: 11400000, guid: e2a5d8c6cdd93bc4a87049d3b08997c0, type: 2}
-  m_IterationBase: {fileID: 0}
 --- !u!114 &6591005994078544340
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1109,7 +574,7 @@ MonoBehaviour:
   m_Directory: Assets\Takes\A2F-Model\Angry
   m_Take: {fileID: 11400000, guid: 03b5552f5e90f5d429469a83389547da, type: 2}
   m_IterationBase: {fileID: 0}
---- !u!114 &7381689387437172724
+--- !u!114 &8314759159539549829
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1118,15 +583,40 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4f77d777dcd06448813d3a34c46357a, type: 3}
-  m_Name: SlatePlayableAsset(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)
+  m_Script: {fileID: 11500000, guid: 0aaaf47297bb7d0428ff07e8b289b3b7, type: 3}
+  m_Name: Neutral Track
   m_EditorClassIdentifier: 
-  m_Version: 1
-  m_AutoClipName: 1
-  m_SceneNumber: 1
-  m_ShotName: Smile
-  m_TakeNumber: 10
-  m_Description: 
-  m_Directory: Assets\Takes
-  m_Take: {fileID: 11400000, guid: e2a5d8c6cdd93bc4a87049d3b08997c0, type: 2}
-  m_IterationBase: {fileID: 0}
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 1
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: 11400000}
+  m_Children: []
+  m_Clips: []
+  m_Markers:
+    m_Objects: []
+--- !u!114 &8554099793095674180
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0aaaf47297bb7d0428ff07e8b289b3b7, type: 3}
+  m_Name: Discomfort Track
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 1
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: 11400000}
+  m_Children: []
+  m_Clips: []
+  m_Markers:
+    m_Objects: []

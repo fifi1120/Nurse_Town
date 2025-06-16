@@ -21,6 +21,7 @@ public class OpenAIRequest : MonoBehaviour
     private CharacterAnimationController animationController;
     private BloodEffectController bloodEffectController;
     private ScoringSystem scoringSystem = new ScoringSystem(); // For scoring system
+    private EmotionController emotionController;
 
     private List<Dictionary<string, string>> chatMessages;
 
@@ -55,6 +56,12 @@ public class OpenAIRequest : MonoBehaviour
 
         animationController = GetComponent<CharacterAnimationController>();
         bloodEffectController = GetComponent<BloodEffectController>();
+        
+        emotionController = GetComponent<EmotionController>();
+        if (emotionController == null)
+        {
+            Debug.LogError("EmotionController component not found on the GameObject.");
+        }
     }
 
     private void InitializePatientInstructions()
@@ -148,7 +155,7 @@ public class OpenAIRequest : MonoBehaviour
             - Use [7] for sad
             - Use [8] for arm stretching
             - Use [9] for neck stretching
-            - Use [10] for blood pressureing, if the nurse asks to measure your blood pressure";
+            - Use [10] for anger";
 
         // Randomly select a patient instruction
         System.Random rand = new System.Random();
@@ -215,7 +222,11 @@ public class OpenAIRequest : MonoBehaviour
             {
                 Debug.LogError("TTSManager instance not found.");
             }
-            // Animation update is handled in TTSManager
+            
+            var match = Regex.Match(messageContent, @"\[(\d+)\]$");
+            if (!match.Success || emotionController == null) yield break;
+            int emotionCode = int.Parse(match.Groups[1].Value);
+            emotionController.HandleEmotionCode(emotionCode);
         }
     }
 

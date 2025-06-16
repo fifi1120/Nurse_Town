@@ -49,6 +49,10 @@ public class TTSManager : MonoBehaviour
     [Tooltip("Whether to delete cached audio files after use")]
     public bool deleteCachedFiles = true;
     
+    [Header("Blood Effect Configuration")]
+    [Tooltip("Reference to the BloodEffectController for blood effects")]
+    public bool useBloodEffectController = true;
+
     // API endpoints
     private static readonly string ttsEndpoint = "https://api.elevenlabs.io/v1/text-to-speech";
     
@@ -98,6 +102,8 @@ public class TTSManager : MonoBehaviour
                 Debug.Log("Audio2Face integration enabled");
             }
         }
+
+        if (!useBloodEffectController) return;
         
         // Find the blood effect in the UI
         bloodEffectController = FindObjectOfType<BloodEffectController>();
@@ -105,7 +111,7 @@ public class TTSManager : MonoBehaviour
         {
             Debug.LogError("BloodEffectController not found in the scene. Make sure it exists in the UI!");
         }
-        
+
         bloodTextController = FindObjectOfType<BloodTextController>();
         if (bloodTextController == null)
         {
@@ -122,7 +128,7 @@ public class TTSManager : MonoBehaviour
             return;
         }
 
-        text = "aaaaa";
+        //text = "With tenure, Suzie’d have all the more leisure for yachting, but her publications are no good.";
 
         // Strip emotion code for TTS but keep original text for animation
         string ttsText = text;
