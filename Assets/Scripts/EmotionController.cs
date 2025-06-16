@@ -35,6 +35,7 @@ public class EmotionController : MonoBehaviour
     public void HandleEmotionCode(int emotionCode)
     {
         TimelineAsset timeline = director.playableAsset as TimelineAsset;
+        _currentEmotionCode = emotionCode;
 
         if (timeline == null)
         {
@@ -43,13 +44,20 @@ public class EmotionController : MonoBehaviour
         }
         
         var allTracks = timeline.GetOutputTracks().ToList();
-
+        
+        /*Debug.Log("All available tracks:");
+        foreach (var track in allTracks)
+        {
+            Debug.Log(" Track: " + track.name);
+        }
+        */
+        
         if (_currentEmotionCode < 0 || _currentEmotionCode >= allTracks.Count)
         {
             Debug.LogError("Track index out of bounds.");
             return;
         }
-
+        
         TrackAsset selectedTrack = allTracks[_currentEmotionCode];
 
         Debug.Log($"Selected track: {selectedTrack.name}");
