@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Serialization;
 using UnityEngine.Timeline;
 
 public class EmotionController : MonoBehaviour
 {
-    public PlayableDirector director;    
-    private int _currentEmotionCode;
+    public PlayableDirector director;
+    public bool setEmotionCode = true;
+    public int currentEmotionCode;
     
    /*
         "Neutral", // 0
@@ -30,30 +32,24 @@ public class EmotionController : MonoBehaviour
     public void HandleEmotionCode(int emotionCode)
     {
         TimelineAsset timeline = director.playableAsset as TimelineAsset;
-        _currentEmotionCode = emotionCode;
+        
+        if (!setEmotionCode) { currentEmotionCode = emotionCode;}
 
-        if (timeline == null)
+            if (timeline == null)
         {
             Debug.LogError("No TimelineAsset assigned to the PlayableDirector.");
             return;
         }
         
         var allTracks = timeline.GetOutputTracks().ToList();
-        
-        /*Debug.Log("All available tracks:");
-        foreach (var track in allTracks)
-        {
-            Debug.Log(" Track: " + track.name);
-        }
-        */
-        
-        if (_currentEmotionCode < 0 || _currentEmotionCode >= allTracks.Count)
+
+        if (currentEmotionCode < 0 || currentEmotionCode >= allTracks.Count)
         {
             Debug.LogError("Track index out of bounds.");
             return;
         }
         
-        TrackAsset selectedTrack = allTracks[_currentEmotionCode];
+        TrackAsset selectedTrack = allTracks[currentEmotionCode];
 
         Debug.Log($"Selected track: {selectedTrack.name}");
 
@@ -61,7 +57,10 @@ public class EmotionController : MonoBehaviour
         {
             track.muted = (track != selectedTrack);
         }
-        
+    }
+
+    public void playEmotion()
+    {
         director.RebuildGraph();
         director.Play();
     }

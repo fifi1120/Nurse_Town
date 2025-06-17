@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System.Text;
 // for animation
 using System.Text.RegularExpressions;
+using UnityEngine.Serialization;
 
 public class TTSManager : MonoBehaviour
 {
@@ -61,6 +62,7 @@ public class TTSManager : MonoBehaviour
     private BloodEffectController bloodEffectController;  
     private BloodTextController bloodTextController;
     private Audio2FaceManager audio2FaceManager;
+    public EmotionController emotionController;
     
     void Awake()
     {
@@ -117,6 +119,12 @@ public class TTSManager : MonoBehaviour
         {
             Debug.LogError("BloodTextController not found in the scene. Make sure it exists in the UI!");
         }
+
+        //_emotionController = GetComponent<EmotionController>();
+        if (emotionController == null)
+        {
+            Debug.LogError("EmotionController not found in the scene. Make sure it exists!");
+        }
     }
 
     // Public method to be called to convert text to speech
@@ -128,7 +136,7 @@ public class TTSManager : MonoBehaviour
             return;
         }
 
-        text = "the, then, they.";
+        //text = "the, then, they.";
 
         // Strip emotion code for TTS but keep original text for animation
         string ttsText = text;
@@ -330,6 +338,13 @@ public class TTSManager : MonoBehaviour
 
         if (www.result == UnityWebRequest.Result.Success)
         {
+            // If the file is successfully loaded, play emotion animation
+            if (emotionController == null)
+            {
+                Debug.LogError("EmotionController not found in the scene. Make sure it exists!");
+            }
+            else {emotionController.playEmotion();}
+            
             // If the file is successfully loaded, get the audio clip and play it
             AudioClip audioClip = DownloadHandlerAudioClip.GetContent(www);
             audioSource.clip = audioClip;
