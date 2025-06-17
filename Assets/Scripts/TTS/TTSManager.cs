@@ -128,7 +128,7 @@ public class TTSManager : MonoBehaviour
             return;
         }
 
-        //text = "With tenure, Suzie’d have all the more leisure for yachting, but her publications are no good.";
+        text = "the, then, they.";
 
         // Strip emotion code for TTS but keep original text for animation
         string ttsText = text;

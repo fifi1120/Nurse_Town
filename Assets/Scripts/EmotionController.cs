@@ -14,14 +14,9 @@ public class EmotionController : MonoBehaviour
         "Neutral", // 0
         "Discomfort", // 1
         "Happy", // 2
-        "Shrug", // 3
-        "Nod", // 4
-        "Shake Head", // 5
-        "Writhing Pain", // 6
-        "Sad", // 7
-        "Stretch Arms", // 8
-        "Stretch Neck", // 9
-        "Anger" // 10
+        "Writhing Pain", // 3
+        "Sad", // 4
+        "Anger" // 5
     */
     
     void Start()

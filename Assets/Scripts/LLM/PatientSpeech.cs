@@ -143,6 +143,7 @@ public class OpenAIRequest : MonoBehaviour
 
     private void InitializeChat()
     {
+        /*
         string emotionInstructions = @"
             IMPORTANT: You must end EVERY response with one of these emotion codes:
             - Use [0] for neutral responses or statements
@@ -156,7 +157,17 @@ public class OpenAIRequest : MonoBehaviour
             - Use [8] for arm stretching
             - Use [9] for neck stretching
             - Use [10] for anger";
-
+        */
+        
+        string emotionInstructions = @"
+            IMPORTANT: You must end EVERY response with one of these emotion codes:
+            - Use [0] for neutral responses or statements
+            - Use [1] for responses involving pain, discomfort, symptoms, or negative feelings
+            - Use [2] for positive responses, gratitude, or when feeling better
+            - Use [3] for writhing in pain
+            - Use [4] for sad
+            - Use [5] for anger";
+        
         // Randomly select a patient instruction
         System.Random rand = new System.Random();
         int patientIndex = rand.Next(patientInstructionsList.Count);
