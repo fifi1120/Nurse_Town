@@ -136,7 +136,7 @@ public class TTSManager : MonoBehaviour
             return;
         }
 
-        //text = "the, then, they.";
+        //text = "Hello there!";
 
         // Strip emotion code for TTS but keep original text for animation
         string ttsText = text;
