@@ -18,6 +18,7 @@ public class OpenAIRequest : MonoBehaviour
     public string apiUrl = "https://api.openai.com/v1/chat/completions";
     public string apiKey;
     public string currentScenario = "brocaAphasia"; // New scenario selector
+    private string currentPatientResponse = "";
     private CharacterAnimationController animationController;
     private BloodEffectController bloodEffectController;
     private ScoringSystem scoringSystem = new ScoringSystem(); // For scoring system
@@ -56,7 +57,7 @@ public class OpenAIRequest : MonoBehaviour
         animationController = GetComponent<CharacterAnimationController>();
         bloodEffectController = GetComponent<BloodEffectController>();
         emotionController = GetComponent<EmotionController>();
-        basePath = Path.Combine(Application.streamingAssetsPath, "Prompts", currentScenario);
+        ScoreManager.Instance.Initialize(currentScenario);
         // Initialize patient instructions and chat
         InitializePatientInstructions();
         InitializeChat();
@@ -65,7 +66,7 @@ public class OpenAIRequest : MonoBehaviour
     private void InitializePatientInstructions()
     {
         string baseInstructions = LoadPromptFromFile("baseInstructions.txt");
-        string caseHistoryPrompt = LoadPromptFromFile("caseHistoryPrompt.txt");
+        string caseHistoryPrompt = LoadPromptFromFile("caseHistory.txt");
         patientInstructionsList = new List<string>();
 
         for (int i = 1; i <= 3; i++)
@@ -134,6 +135,7 @@ public class OpenAIRequest : MonoBehaviour
 
         // Evaluate nurse's response
         scoringSystem.EvaluateNurseResponse(nurseMessage);
+        ScoreManager.Instance.RecordTurn(currentPatientResponse, nurseMessage);
     }
 
     IEnumerator PostRequest()
@@ -154,6 +156,7 @@ public class OpenAIRequest : MonoBehaviour
         {
             var jsonResponse = JObject.Parse(request.downloadHandler.text);
             var messageContent = jsonResponse["choices"][0]["message"]["content"].ToString();
+            currentPatientResponse = messageContent;
 
             chatMessages.Add(new Dictionary<string, string>() { { "role", "assistant" }, { "content", messageContent } });
             PrintChatMessage(chatMessages);

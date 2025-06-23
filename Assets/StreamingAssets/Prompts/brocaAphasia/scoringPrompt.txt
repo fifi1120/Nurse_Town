@@ -63,5 +63,3 @@ JSON format:
   "performanceLevel": "<Outstanding / Proficient / Developing / Needs Improvement>",
   "overallExplanation": "<brief summary>"
 }
-
-Now analyze the following nurse's response.
