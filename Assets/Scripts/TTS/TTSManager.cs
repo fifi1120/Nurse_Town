@@ -10,7 +10,6 @@ using Newtonsoft.Json;
 using System.Text;
 // for animation
 using System.Text.RegularExpressions;
-using UnityEngine.Serialization;
 
 public class TTSManager : MonoBehaviour
 {
@@ -42,6 +41,11 @@ public class TTSManager : MonoBehaviour
     [Range(0f, 1f)]
     [Tooltip("Style exaggeration value (0-1)")]
     public float styleExaggeration = 0.3f;
+
+    [Range(0.7f, 1.2f)]
+    [Tooltip("Speed value (0.7 - 1.2)")]
+    public float speed = 1.0f;
+
     
     [Header("Audio2Face Integration")]
     [Tooltip("Whether to use Audio2Face for facial animation")]
@@ -62,7 +66,6 @@ public class TTSManager : MonoBehaviour
     private BloodEffectController bloodEffectController;  
     private BloodTextController bloodTextController;
     private Audio2FaceManager audio2FaceManager;
-    public EmotionController emotionController;
     
     void Awake()
     {
@@ -119,12 +122,6 @@ public class TTSManager : MonoBehaviour
         {
             Debug.LogError("BloodTextController not found in the scene. Make sure it exists in the UI!");
         }
-
-        //_emotionController = GetComponent<EmotionController>();
-        if (emotionController == null)
-        {
-            Debug.LogError("EmotionController not found in the scene. Make sure it exists!");
-        }
     }
 
     // Public method to be called to convert text to speech
@@ -136,7 +133,7 @@ public class TTSManager : MonoBehaviour
             return;
         }
 
-        //text = "Hello there!";
+        //text = "With tenure, Suzie’d have all the more leisure for yachting, but her publications are no good.";
 
         // Strip emotion code for TTS but keep original text for animation
         string ttsText = text;
@@ -153,7 +150,8 @@ public class TTSManager : MonoBehaviour
             modelId,
             stability,
             similarityBoost,
-            styleExaggeration
+            styleExaggeration,
+            speed
         );
         
         if (audioData != null)
@@ -182,7 +180,9 @@ public class TTSManager : MonoBehaviour
         string modelId, 
         float stability = 0.4f, 
         float similarityBoost = 0.75f, 
-        float styleExaggeration = 0.3f)
+        float styleExaggeration = 0.3f,
+        float speed = 1.0f
+        )
     {
         string endpoint = $"{ttsEndpoint}/{voiceId}?output_format=pcm_16000";
         
@@ -204,7 +204,8 @@ public class TTSManager : MonoBehaviour
                     {
                         stability = stability,
                         similarity_boost = similarityBoost,
-                        style_exaggeration = styleExaggeration
+                        style_exaggeration = styleExaggeration,
+                        speed = speed
                     }
                 };
 
@@ -338,13 +339,6 @@ public class TTSManager : MonoBehaviour
 
         if (www.result == UnityWebRequest.Result.Success)
         {
-            // If the file is successfully loaded, play emotion animation
-            if (emotionController == null)
-            {
-                Debug.LogError("EmotionController not found in the scene. Make sure it exists!");
-            }
-            else {emotionController.playEmotion();}
-            
             // If the file is successfully loaded, get the audio clip and play it
             AudioClip audioClip = DownloadHandlerAudioClip.GetContent(www);
             audioSource.clip = audioClip;
@@ -396,6 +390,7 @@ public class TTSManager : MonoBehaviour
         public float stability { get; set; }
         public float similarity_boost { get; set; }
         public float style_exaggeration { get; set; }
+        public float speed { get; set; }
     }
 
     public void UpdateAnimation(string message)
