@@ -50,7 +50,8 @@ INSTRUCTIONS:
 - Return the result strictly in JSON format below.
 - Use a **list of criteria objects**. 
 - Each criterion should include: name, score (1-4), maxScore (always 4), and explanation.
-- Include totalScore, performanceLevel, and overallExplanation.
+- Include totalScore, performanceLevel, and overallExplanation. 
+- Within this explanation, please provide specific examples of the student's original responses and offer precise suggestions for how they could have responded more effectively.
 
 JSON format:
 
