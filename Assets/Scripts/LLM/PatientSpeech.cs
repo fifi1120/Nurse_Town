@@ -15,21 +15,16 @@ using System.Text.RegularExpressions;
 public class OpenAIRequest : MonoBehaviour
 {
     public static OpenAIRequest Instance; // Singleton instance
-
     public string apiUrl = "https://api.openai.com/v1/chat/completions";
     public string apiKey;
+    public string currentScenario = "brocaAphasia"; // New scenario selector
     private CharacterAnimationController animationController;
     private BloodEffectController bloodEffectController;
     private ScoringSystem scoringSystem = new ScoringSystem(); // For scoring system
     private EmotionController emotionController;
-
+    private string basePath;
+    private List<string> patientInstructionsList = new List<string>();
     private List<Dictionary<string, string>> chatMessages;
-
-    // Variables for multiple patients
-    private List<string> patientInstructionsList;
-    private string patient1Instructions;
-    private string patient2Instructions;
-    private string patient3Instructions;
 
     void Awake()
     {
@@ -44,106 +39,55 @@ public class OpenAIRequest : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
+    private string LoadPromptFromFile(string fileName)
+    {
+        string filePath = Path.Combine(basePath, fileName);
+        if (!File.Exists(filePath))
+        {
+            Debug.LogError("Prompt file not found: " + filePath);
+            return "";
+        }
+        return File.ReadAllText(filePath);
+    }
     void Start()
     {
         apiKey = EnvironmentLoader.GetEnvVariable("OPENAI_API_KEY");
-        // Debug.Log("Using APIKey:" + apiKey);
-
+        basePath = Path.Combine(Application.streamingAssetsPath, "Prompts", currentScenario);
+        animationController = GetComponent<CharacterAnimationController>();
+        bloodEffectController = GetComponent<BloodEffectController>();
+        emotionController = GetComponent<EmotionController>();
+        basePath = Path.Combine(Application.streamingAssetsPath, "Prompts", currentScenario);
         // Initialize patient instructions and chat
         InitializePatientInstructions();
         InitializeChat();
-
-        animationController = GetComponent<CharacterAnimationController>();
-        bloodEffectController = GetComponent<BloodEffectController>();
-        
-        emotionController = GetComponent<EmotionController>();
-        if (emotionController == null)
-        {
-            Debug.LogError("EmotionController component not found on the GameObject.");
-        }
     }
 
     private void InitializePatientInstructions()
     {
-        // Base instructions for the patient's medical history and symptoms
-        string baseInstructions = @"
-            You are strictly playing the role of Mrs. Johnson. 
-            Background:
-            - Mrs. Johnson is a 62-year-old female admitted to the hospital with severe headache and dizziness.
-            - She has a 5-year history of hypertension and occasionally misses doses due to forgetfulness.
-            - Family history includes hypertension and heart disease (mother and brother).
-            - Works as a school teacher and lives with her husband.
-            - Leads a sedentary lifestyle and enjoys watching TV in her spare time.
+        string baseInstructions = LoadPromptFromFile("baseInstructions.txt");
+        string caseHistoryPrompt = LoadPromptFromFile("caseHistoryPrompt.txt");
+        patientInstructionsList = new List<string>();
 
-            Clinical Presentation and Responses:
-            - Symptoms: Constant, throbbing headache in the temples; dizziness worsens upon standing quickly. No vision changes, nausea, or confusion.
-            - Medical History: Openly shares hypertension history; mentions sometimes forgetting medication.
-            - Current Medications: Tries to recall antihypertensive medication name (e.g., 'I think it's called lisinopril...').
-            - Lifestyle: Admits to a sedentary routine; doesn't exercise regularly; occasionally eats salty foods and drinks coffee daily.
-            - Family History: Mentions mother and brother with high blood pressure; adds that mother had heart disease if prompted.
-            ";
-
-        // Patient 1: Normal personality (original version)
-        patient1Instructions = baseInstructions + @"
-
-            Tone and Personality:
-            - Polite and cooperative tone; generally compliant and concerned about her health.
-            - Expresses mild anxiety about current symptoms; headaches and dizziness are more severe than usual.
-            - Occasionally shows forgetfulness or hesitation when recalling medication details.
-
-            Emotional Response:
-            - Displays concern when discussing family history but reassures that such symptoms are unusual for her.
-            - Open to lifestyle changes or medication adherence strategies but hesitant about drastic changes.
-
-            As Mrs. Johnson, please initiate the conversation by greeting the nurse and mentioning how you're feeling. 
-            If off-topic, guide the conversation back to your health concerns.
-            Please keep responses concise.
-            ";
-
-        // Patient 2: Speaks very little, gives vague descriptions
-        patient2Instructions = baseInstructions + @"
-
-            Tone and Personality:
-            - Reserved and speaks very little.
-            - Provides brief and sometimes vague answers, saying something like 'i don't remember.../i am not sure'
-            - Requires the nurse to ask more probing questions to obtain information.
-
-            Emotional Response:
-            - Appears indifferent or slightly detached.
-            - Does not volunteer additional information unless specifically asked.
-            - May give one-word answers or simple acknowledgments.
-
-            As Mrs. Johnson, please initiate the conversation by saying minimal words like 'hi nurse'.
-            ";
-
-        // Patient 3: Emotionally excited, uses phrases like 'I feel I am dying. I cannot stand it!!!!!!'
-        patient3Instructions = baseInstructions + @"
-
-            Tone and Personality:
-            - Highly emotional and anxious.
-            - Responses are intense and be exaggerated.
-            - Frequently uses emotional phrases like 'I feel I am dying. I cannot stand it!!!!!!'
-
-            Emotional Response:
-            - Displays significant anxiety and distress about her condition.
-            - May interrupt the nurse or speak rapidly.
-            - Finds it difficult to be consoled.
-
-            As Mrs. Johnson, please initiate the conversation by expressing your extreme distress.
-            ";
-
-        patientInstructionsList = new List<string>()
+        for (int i = 1; i <= 3; i++)
         {
-            patient1Instructions,
-            patient2Instructions,
-            patient3Instructions
-        };
+            string patientFile = $"patient{i}.txt";
+            string patientSpecific = LoadPromptFromFile(patientFile);
+            if (string.IsNullOrEmpty(patientSpecific))
+            {
+                Debug.LogError("Failed to load patient file: " + patientFile);
+                continue;
+            }
+            string fullPrompt = $"{baseInstructions}\n{caseHistoryPrompt}\n{patientSpecific}";
+            patientInstructionsList.Add(fullPrompt);
+        }
+        if (patientInstructionsList.Count == 0)
+        {
+            Debug.LogError("No patient instructions loaded for scenario: " + currentScenario);
+        }
     }
 
     private void InitializeChat()
     {
-        /*
         string emotionInstructions = @"
             IMPORTANT: You must end EVERY response with one of these emotion codes:
             - Use [0] for neutral responses or statements
@@ -157,17 +101,7 @@ public class OpenAIRequest : MonoBehaviour
             - Use [8] for arm stretching
             - Use [9] for neck stretching
             - Use [10] for anger";
-        */
-        
-        string emotionInstructions = @"
-            IMPORTANT: You must end EVERY response with one of these emotion codes:
-            - Use [0] for neutral responses or statements
-            - Use [1] for responses involving pain, discomfort, symptoms, or negative feelings
-            - Use [2] for positive responses, gratitude, or when feeling better
-            - Use [3] for writhing in pain
-            - Use [4] for sad
-            - Use [5] for anger";
-        
+
         // Randomly select a patient instruction
         System.Random rand = new System.Random();
         int patientIndex = rand.Next(patientInstructionsList.Count);
