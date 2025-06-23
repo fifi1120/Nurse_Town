@@ -24,7 +24,7 @@ public class OpenAIRequest : MonoBehaviour
     private ScoringSystem scoringSystem = new ScoringSystem(); // For scoring system
     private EmotionController emotionController;
     private string basePath;
-    private List<string> patientInstructionsList = new List<string>();
+    private List<string> patientInstructionsList;
     private List<Dictionary<string, string>> chatMessages;
 
     void Awake()
@@ -54,13 +54,17 @@ public class OpenAIRequest : MonoBehaviour
     {
         apiKey = EnvironmentLoader.GetEnvVariable("OPENAI_API_KEY");
         basePath = Path.Combine(Application.streamingAssetsPath, "Prompts", currentScenario);
-        animationController = GetComponent<CharacterAnimationController>();
-        bloodEffectController = GetComponent<BloodEffectController>();
-        emotionController = GetComponent<EmotionController>();
         ScoreManager.Instance.Initialize(currentScenario);
         // Initialize patient instructions and chat
         InitializePatientInstructions();
         InitializeChat();
+        animationController = GetComponent<CharacterAnimationController>();
+        bloodEffectController = GetComponent<BloodEffectController>();
+        emotionController = GetComponent<EmotionController>();
+        if (emotionController == null)
+        {
+            Debug.LogError("EmotionController component not found on the GameObject.");
+        }
     }
 
     private void InitializePatientInstructions()
@@ -94,14 +98,9 @@ public class OpenAIRequest : MonoBehaviour
             - Use [0] for neutral responses or statements
             - Use [1] for responses involving pain, discomfort, symptoms, or negative feelings
             - Use [2] for positive responses, gratitude, or when feeling better
-            - Use [3] for shrugging
-            - Use [4] for head nodding
-            - Use [5] for head shaking
-            - Use [6] for writhing in pain
-            - Use [7] for sad
-            - Use [8] for arm stretching
-            - Use [9] for neck stretching
-            - Use [10] for anger";
+            - Use [3] for writhing in pain
+            - Use [4] for sad
+            - Use [5] for anger";
 
         // Randomly select a patient instruction
         System.Random rand = new System.Random();
@@ -134,7 +133,7 @@ public class OpenAIRequest : MonoBehaviour
         StartCoroutine(PostRequest());
 
         // Evaluate nurse's response
-        scoringSystem.EvaluateNurseResponse(nurseMessage);
+        // scoringSystem.EvaluateNurseResponse(nurseMessage);
         ScoreManager.Instance.RecordTurn(currentPatientResponse, nurseMessage);
     }
 
