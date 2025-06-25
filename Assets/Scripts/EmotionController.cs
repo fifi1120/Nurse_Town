@@ -59,7 +59,7 @@ public class EmotionController : MonoBehaviour
         }
     }
 
-    public void playEmotion()
+    public void PlayEmotion()
     {
         director.RebuildGraph();
         director.Play();

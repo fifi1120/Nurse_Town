@@ -127,7 +127,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5538567356164335875, guid: 42bd9945d4cad1544b189a9122d9b1ef, type: 3}
   m_PrefabInstance: {fileID: 3246753504023554014}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1601890061}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6a150137ffaacba4c9ede0797f2e1000, type: 3}
@@ -157,6 +157,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   apiUrl: https://api.openai.com/v1/chat/completions
   apiKey: 
+  currentScenario: brocaAphasia
 --- !u!114 &553954846
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,10 +205,10 @@ MonoBehaviour:
   stability: 0.4
   similarityBoost: 0.75
   styleExaggeration: 0.3
+  speed: 1
   useAudio2Face: 0
   deleteCachedFiles: 0
   useBloodEffectController: 0
-  emotionController: {fileID: 0}
 --- !u!114 &553954849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -753,6 +754,23 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 038622b2d31536242baf88cdd0b0aa05, type: 3}
+--- !u!1 &1601890061 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1068050644127363385, guid: 42bd9945d4cad1544b189a9122d9b1ef, type: 3}
+  m_PrefabInstance: {fileID: 3246753504023554014}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1601890074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1601890061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac37491d7e2b33f4197f0f3759382132, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1668925251
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2757,7 +2775,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1068050644127363385, guid: 42bd9945d4cad1544b189a9122d9b1ef, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1601890074}
   m_SourcePrefab: {fileID: 100100000, guid: 42bd9945d4cad1544b189a9122d9b1ef, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
