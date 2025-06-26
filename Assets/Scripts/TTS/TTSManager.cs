@@ -66,7 +66,6 @@ public class TTSManager : MonoBehaviour
     private BloodEffectController bloodEffectController;  
     private BloodTextController bloodTextController;
     private Audio2FaceManager audio2FaceManager;
-    public EmotionController emotionController;
     
     void Awake()
     {
@@ -107,7 +106,6 @@ public class TTSManager : MonoBehaviour
             {
                 Debug.Log("Audio2Face integration enabled");
             }
-            
         }
 
         if (!useBloodEffectController) return;
@@ -123,11 +121,6 @@ public class TTSManager : MonoBehaviour
         if (bloodTextController == null)
         {
             Debug.LogError("BloodTextController not found in the scene. Make sure it exists in the UI!");
-        }
-        
-        if (emotionController == null)
-        {
-            Debug.LogError("EmotionController not found in the scene. Make sure it exists!");
         }
     }
 
@@ -350,13 +343,6 @@ public class TTSManager : MonoBehaviour
             AudioClip audioClip = DownloadHandlerAudioClip.GetContent(www);
             audioSource.clip = audioClip;
             audioSource.Play();
-            
-            // If the file is successfully loaded, play emotion animation
-            if (emotionController == null)
-            {
-                Debug.LogError("EmotionController not found in the scene. Make sure it exists!");
-            }
-            else emotionController.PlayEmotion();
             
             // Update animation based on emotion code
             UpdateAnimation(messageContent);
