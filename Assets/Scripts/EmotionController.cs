@@ -16,7 +16,7 @@ public class EmotionController : MonoBehaviour
         "Neutral", // 0
         "Discomfort", // 1
         "Happy", // 2
-        "Writhing Pain", // 3
+        "Pain", // 3
         "Sad", // 4
         "Anger" // 5
     */
@@ -50,16 +50,17 @@ public class EmotionController : MonoBehaviour
         }
         
         TrackAsset selectedTrack = allTracks[currentEmotionCode];
-
+        
+        Debug.Log("Emotion Code: " + emotionCode);
         Debug.Log($"Selected track: {selectedTrack.name}");
 
         foreach (var track in allTracks)
         {
-            track.muted = (track != selectedTrack);
+            if (track.name != "Blink Track") track.muted = (track != selectedTrack);
         }
     }
 
-    public void playEmotion()
+    public void PlayEmotion()
     {
         director.RebuildGraph();
         director.Play();

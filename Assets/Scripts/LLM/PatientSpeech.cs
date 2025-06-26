@@ -96,11 +96,11 @@ public class OpenAIRequest : MonoBehaviour
         string emotionInstructions = @"
             IMPORTANT: You must end EVERY response with one of these emotion codes:
             - Use [0] for neutral responses or statements
-            - Use [1] for responses involving pain, discomfort, symptoms, or negative feelings
+            - Use [1] for responses involving minor pain or discomfort
             - Use [2] for positive responses, gratitude, or when feeling better
-            - Use [3] for writhing in pain
+            - Use [3] for pain
             - Use [4] for sad
-            - Use [5] for anger";
+            - Use [5] for anger or frustration";
 
         // Randomly select a patient instruction
         System.Random rand = new System.Random();
@@ -170,7 +170,7 @@ public class OpenAIRequest : MonoBehaviour
                 Debug.LogError("TTSManager instance not found.");
             }
             
-            var match = Regex.Match(messageContent, @"\[(\d+)\]$");
+            var match = Regex.Match(messageContent, @"\[(\d+)\]");
             if (!match.Success || emotionController == null) yield break;
             int emotionCode = int.Parse(match.Groups[1].Value);
             emotionController.HandleEmotionCode(emotionCode);
