@@ -269,6 +269,15 @@ MonoBehaviour:
   director: {fileID: 628713428}
   setEmotionCode: 1
   currentEmotionCode: 0
+  animator: {fileID: 0}
+  allTracks: []
+  emotionNames:
+  - Neutral
+  - Discomfort
+  - Happy
+  - Pain
+  - Sad
+  - Anger
 --- !u!320 &628713428 stripped
 PlayableDirector:
   m_CorrespondingSourceObject: {fileID: 8520844644689385800, guid: a43198582a42e2c4b843a4fc9ee8851e, type: 3}
@@ -2419,9 +2428,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1149797311}
     - target: {fileID: 5538567356164335875, guid: 42bd9945d4cad1544b189a9122d9b1ef, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 1601890072}
+    - target: {fileID: 5538567356164335875, guid: 42bd9945d4cad1544b189a9122d9b1ef, type: 3}
       propertyPath: setEmotionCode
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5538567356164335875, guid: 42bd9945d4cad1544b189a9122d9b1ef, type: 3}
+      propertyPath: animatorController
+      value: 
+      objectReference: {fileID: 9100000, guid: 4b65e50bcbf52ff4d9b2ea8a33b8db90, type: 2}
     - target: {fileID: 5538567356164335875, guid: 42bd9945d4cad1544b189a9122d9b1ef, type: 3}
       propertyPath: currentEmotionCode
       value: 0

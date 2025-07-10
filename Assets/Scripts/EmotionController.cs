@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,19 +13,12 @@ public class EmotionController : MonoBehaviour
     public PlayableDirector director;
     public bool setEmotionCode = true;
     public int currentEmotionCode;
+    private int previousEmotionCode = 0;
     public Animator animator;
-    public List<TrackAsset> allTracks = new List<TrackAsset>();
-    public List<AnimatorControllerParameter> animatorParameters = new List<AnimatorControllerParameter>();
-    
-   /*
-        "Neutral", // 0
-        "Discomfort", // 1
-        "Happy", // 2
-        "Pain", // 3
-        "Sad", // 4
-        "Anger" // 5
-    */
-    
+    public List<TrackAsset> allTracks = new();
+
+    public string[] emotionNames = {"Neutral", "Discomfort", "Happy", "Pain", "Sad", "Anger"};
+
     void Start()
     {
         if (director == null)
@@ -39,11 +33,13 @@ public class EmotionController : MonoBehaviour
             return;
         }
         allTracks = timeline.GetOutputTracks().ToList();
-        animatorParameters = animator.parameters.ToList();
     }
     
     public void HandleEmotionCode(int emotionCode)
     {
+        animator.ResetTrigger(emotionNames[previousEmotionCode]);
+
+        previousEmotionCode = emotionCode;
         if (!setEmotionCode) { currentEmotionCode = emotionCode;}
         
         if (currentEmotionCode < 0 || currentEmotionCode >= allTracks.Count)
@@ -54,11 +50,6 @@ public class EmotionController : MonoBehaviour
         
         TrackAsset selectedTrack = allTracks[currentEmotionCode];
         
-        foreach (var parameter in animatorParameters)
-        {
-            animator.SetBool(parameter.name, parameter.name == animatorParameters[currentEmotionCode].name);
-        }
-        
         Debug.Log("Emotion Code: " + emotionCode);
         Debug.Log($"Selected track: {selectedTrack.name}");
 
@@ -66,7 +57,12 @@ public class EmotionController : MonoBehaviour
         {
             if (track.name != "Blink Track") track.muted = (track != selectedTrack);
         }
+        
+        animator.SetTrigger(emotionNames[currentEmotionCode]);
+        Debug.Log("Set trigger: " + emotionNames[currentEmotionCode]);
     }
+    
+   
 
     public void PlayEmotion()
     {
