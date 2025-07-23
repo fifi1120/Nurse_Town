@@ -3,6 +3,7 @@ using TMPro;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.IO;
+using System.Collections.Generic;
 using Newtonsoft.Json; // Make sure you have Newtonsoft.Json imported for JSON parsing
 
 public class SpeechToTextController2 : MonoBehaviour
@@ -18,7 +19,7 @@ public class SpeechToTextController2 : MonoBehaviour
     {
         openAiApiKey = EnvironmentLoader.GetEnvVariable("OPENAI_API_KEY");
         // Debug.Log("APIKey:" + openAiApiKey);
-        
+
     }
 
     void Update()
@@ -59,10 +60,10 @@ public class SpeechToTextController2 : MonoBehaviour
         SavWav.Save("recordedAudio.wav", recordedClip);
 
         // Send the WAV file to OpenAI Whisper API
-        string transcription = await SendToWhisperAPI(filePath, "whisper-1", "en", "json", 0.2f);
+        WhisperResult speech = await SendToWhisperAPI(filePath, "whisper-1", "en", 0.2f);
 
         // Display only the transcription text
-        transcriptText.text = transcription;
+        transcriptText.text = speech.text;
 
         // Optionally delete the temporary file
         File.Delete(filePath);
@@ -70,7 +71,7 @@ public class SpeechToTextController2 : MonoBehaviour
         // Fiona update 11/13: integrate with patient NPC
         if (OpenAIRequest.Instance != null)
         {
-            OpenAIRequest.Instance.ReceiveNurseTranscription(transcription);
+            OpenAIRequest.Instance.ReceiveNurseTranscription(speech.text, speech.wpm);
         }
         else
         {
@@ -78,7 +79,7 @@ public class SpeechToTextController2 : MonoBehaviour
         }
     }
 
-    private async Task<string> SendToWhisperAPI(string filePath, string model, string language, string responseFormat, float temperature)
+    private async Task<WhisperResult> SendToWhisperAPI(string filePath, string model, string language, float temperature)
     {
         using (HttpClient client = new HttpClient())
         {
@@ -95,7 +96,7 @@ public class SpeechToTextController2 : MonoBehaviour
                 if (!string.IsNullOrEmpty(language))
                     form.Add(new StringContent(language), "language");
 
-                form.Add(new StringContent(responseFormat), "response_format");
+                form.Add(new StringContent("verbose_json"), "response_format");
                 form.Add(new StringContent(temperature.ToString()), "temperature");
 
                 HttpResponseMessage response = await client.PostAsync("https://api.openai.com/v1/audio/transcriptions", form);
@@ -105,13 +106,38 @@ public class SpeechToTextController2 : MonoBehaviour
                     // Parse the JSON response and extract only the "text" field
                     var responseContent = await response.Content.ReadAsStringAsync();
                     var transcriptionResponse = JsonConvert.DeserializeObject<TranscriptionResponse>(responseContent);
-                    return transcriptionResponse.text;
+
+                    // check for missing or empty segments
+                    if (transcriptionResponse.segments == null || transcriptionResponse.segments.Count == 0)
+                    {
+                        Debug.LogWarning("No segments received from Whisper.");
+                        return new WhisperResult
+                        {
+                            text = transcriptionResponse.text,
+                            wpm = 0f
+                        };
+                    }
+
+                    // Calculate the speech rate
+                    float start = transcriptionResponse.segments[0].start;
+                    float end = transcriptionResponse.segments[transcriptionResponse.segments.Count - 1].end;
+
+                    float durationInMinutes = Mathf.Max((end - start) / 60f, 0.001f); // avoid division by zero
+
+                    int wordCount = System.Text.RegularExpressions.Regex.Matches(transcriptionResponse.text, @"\b\w+\b").Count;
+                    float wpm = wordCount / durationInMinutes;
+
+                    return new WhisperResult
+                    {
+                        text = transcriptionResponse.text,
+                        wpm = wpm
+                    };
                 }
                 else
                 {
                     string errorContent = await response.Content.ReadAsStringAsync();
                     Debug.LogError("Transcription failed: " + response.ReasonPhrase + " - " + errorContent);
-                    return "Error in transcription";
+                    return new WhisperResult { text = "Error in transcription", wpm = 0f };
                 }
             }
         }
@@ -121,5 +147,19 @@ public class SpeechToTextController2 : MonoBehaviour
     private class TranscriptionResponse
     {
         public string text { get; set; }
+        public List<Segment> segments { get; set; }
+    }
+
+    private class Segment
+    {
+        public float start { get; set; }
+        public float end { get; set; }
+        public string text { get; set; }
+    }
+    
+    private class WhisperResult
+    {
+        public string text;
+        public float wpm;
     }
 }

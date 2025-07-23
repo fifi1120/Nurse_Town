@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using UnityEngine.Audio;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using System.Text;
 // for animation
@@ -151,7 +153,7 @@ public class TTSManager : MonoBehaviour
         }
 
         // Get audio data from ElevenLabs TTS service
-        byte[] audioData = await GetElevenLabsTTSAudio(
+        (byte[] audioData, List<WordTiming> wordTimings) = await GetElevenLabsTTSAudio(
             ttsText,
             voiceId,
             modelId,
@@ -161,18 +163,11 @@ public class TTSManager : MonoBehaviour
             speed
         );
         
-        if (audioData != null)
+        //Debug.LogWarning("Word Timings List: " + (wordTimings != null ? string.Join(", ", wordTimings.Select(w => $"{w.Word} ({w.StartTime}-{w.EndTime})")) : "null"));
+
+        if (audioData != null && wordTimings != null)
         {
-            if (useAudio2Face && audio2FaceManager != null)
-            {
-                // Process with Audio2Face
-                ProcessWithAudio2Face(audioData, text);
-            }
-            else
-            {
-                // Fallback to direct audio playback with emotion code
-                ProcessAudioBytes(audioData, text);
-            }
+            ProcessAudioBytes(audioData, wordTimings, text);
         }
         else
         {
@@ -181,69 +176,84 @@ public class TTSManager : MonoBehaviour
     }
 
     // Method to get TTS audio from ElevenLabs
-    private async Task<byte[]> GetElevenLabsTTSAudio(
-        string inputText, 
-        string voiceId, 
-        string modelId, 
-        float stability = 0.4f, 
-        float similarityBoost = 0.75f, 
-        float styleExaggeration = 0.3f,
-        float speed = 1.0f
-        )
+    private async Task<(byte[] audioData, List<WordTiming> wordTimings)> GetElevenLabsTTSAudio(
+    string inputText,
+    string voiceId,
+    string modelId,
+    float stability = 0.4f,
+    float similarityBoost = 0.75f,
+    float styleExaggeration = 0.3f,
+    float speed = 1.0f)
+{
+    
+    string endpoint = $"{ttsEndpoint}/{voiceId}/with-timestamps?output_format=pcm_16000";
+
+    using (HttpClient client = new HttpClient())
     {
-        string endpoint = $"{ttsEndpoint}/{voiceId}?output_format=pcm_16000";
-        
-        using (HttpClient client = new HttpClient())
+        try
         {
-            try
+            client.DefaultRequestHeaders.Clear();
+            client.DefaultRequestHeaders.Add("xi-api-key", elevenLabsApiKey.Trim());
+
+            var requestBody = new
             {
-                Debug.Log($"API Key length: {elevenLabsApiKey?.Length}");
-                client.DefaultRequestHeaders.Clear();
-                client.DefaultRequestHeaders.Add("xi-api-key", elevenLabsApiKey.Trim());
-                Debug.Log("Headers set: xi-api-key header present: " + client.DefaultRequestHeaders.Contains("xi-api-key"));
-
-                // Create the request body
-                var requestBody = new ElevenLabsTTSRequest
+                text = inputText,
+                model_id = modelId,
+                voice_settings = new
                 {
-                    text = inputText,
-                    model_id = modelId,
-                    voice_settings = new VoiceSettings
-                    {
-                        stability = stability,
-                        similarity_boost = similarityBoost,
-                        style_exaggeration = styleExaggeration,
-                        speed = speed
-                    }
-                };
-
-                // Serialize the request body to JSON
-                string jsonContent = JsonConvert.SerializeObject(requestBody);
-                var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-
-                // Send the POST request
-                HttpResponseMessage response = await client.PostAsync(endpoint, content);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    // If the request is successful, read the byte array of the audio data
-                    return await response.Content.ReadAsByteArrayAsync();
+                    stability,
+                    similarity_boost = similarityBoost,
+                    style_exaggeration = styleExaggeration,
+                    speed
                 }
-                else
-                {
-                    // Log error if the request fails
-                    string errorResponse = await response.Content.ReadAsStringAsync();
-                    Debug.LogError("Error with ElevenLabs TTS API: " + response.ReasonPhrase + "\nDetails: " + errorResponse);
-                    return null;
-                }
-            }
-            catch (Exception ex)
+            };
+
+            string jsonContent = JsonConvert.SerializeObject(requestBody);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+            
+            Debug.Log("POST endpoint: " + endpoint);
+            Debug.Log("Request body:\n" + jsonContent);
+            Debug.Log("Content-Type: " + content.Headers.ContentType);
+
+            HttpResponseMessage response = await client.PostAsync(endpoint, content);
+
+            if (!response.IsSuccessStatusCode)
             {
-                Debug.LogError($"Exception in GetElevenLabsTTSAudio: {ex.Message}\nStack trace: {ex.StackTrace}");
-                return null;
+                string error = await response.Content.ReadAsStringAsync();
+                Debug.LogError($"TTS API Error: {response.StatusCode} — {error}");
+                return (null, null);
             }
+            
+            string jsonResponse = await response.Content.ReadAsStringAsync();
+            Debug.Log("JSON response preview: " + jsonResponse.Substring(0, Math.Min(jsonResponse.Length, 500)));
+
+            var parsed = JsonConvert.DeserializeObject<ElevenLabsResponse>(jsonResponse);
+
+            if (parsed?.AudioBase64 == null || parsed.Alignment == null)
+            {
+                Debug.LogError("TTS response missing audio data or word timings.");
+                return (null, null);
+            }
+
+            byte[] audioBytes = Convert.FromBase64String(parsed.AudioBase64);
+            return (audioBytes, parsed.Alignment.Characters
+                .Select((word, index) => new WordTiming
+                {
+                    Word = word,
+                    StartTime = parsed.Alignment.CharacterStartTimesSeconds[index],
+                    EndTime = parsed.Alignment.CharacterEndTimesSeconds[index]
+                })
+                .ToList());
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Exception in GetElevenLabsTTSAudio: {ex.Message}");
+            return (null, null);
         }
     }
-    
+}
+
+
     private void AddWavHeaderAndSave(byte[] pcmData, string filePath, int sampleRate = 16000, int channels = 1)
     {
         using (var fileStream = new FileStream(filePath, FileMode.Create))
@@ -279,49 +289,9 @@ public class TTSManager : MonoBehaviour
         Debug.Log($"Saved WAV file with PCM data to: {filePath}");
     }
     
-    // Method to process audio with Audio2Face
-    private async void ProcessWithAudio2Face(byte[] audioData, string messageContent)
-    {
-        try
-        {
-            Debug.Log("Starting Audio2Face processing...");
-            
-            // Save a copy of the audio for direct playback (we'll need this for emotion triggers)
-            string filePath = Path.Combine(Application.persistentDataPath, "audio.wav");
-            if (File.Exists(filePath))
-            {
-                File.Delete(filePath);
-            }
-            
-            AddWavHeaderAndSave(audioData, filePath);
-            byte[] wavData = File.ReadAllBytes(filePath);
-
-            // Process the audio with Audio2Face
-            bool success = await audio2FaceManager.ProcessAudioForFacialAnimation(wavData, messageContent);
-            
-            if (success)
-            {
-                Debug.Log("Audio2Face processing completed successfully");
-                
-                // Animation will be loaded by the Audio2FaceManager
-                // We just need to play the audio and handle emotion triggers
-                // StartCoroutine(LoadAndPlayAudio(filePath, messageContent));
-            }
-            else
-            {
-                Debug.LogError("Audio2Face processing failed. Falling back to direct audio playback.");
-                ProcessAudioBytes(audioData, messageContent);
-            }
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"Error in ProcessWithAudio2Face: {ex.Message}");
-            ProcessAudioBytes(audioData, messageContent);
-        }
-    }
 
     // Method to process and play the audio bytes received
-    private void ProcessAudioBytes(byte[] audioData, string messageContent)
+    private void ProcessAudioBytes(byte[] audioData, List<WordTiming> wordTimings, string messageContent)
     {
         // Save the audio data as a .wav file locally
         string filePath = Path.Combine(Application.persistentDataPath, "audio.wav");
@@ -334,11 +304,11 @@ public class TTSManager : MonoBehaviour
         AddWavHeaderAndSave(audioData, filePath);
 
         // Start coroutine to load and play the audio file
-        StartCoroutine(LoadAndPlayAudio(filePath, messageContent));
+        StartCoroutine(LoadAndPlayAudio(wordTimings, filePath, messageContent));
     }
 
     // Coroutine to load and play the audio file
-    private IEnumerator LoadAndPlayAudio(string filePath, string messageContent)
+    private IEnumerator LoadAndPlayAudio(List<WordTiming> wordTimings, string filePath, string messageContent)
     {
         // Create a UnityWebRequest to load the audio file
         using UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip("file://" + filePath, AudioType.WAV);
@@ -356,7 +326,11 @@ public class TTSManager : MonoBehaviour
             {
                 Debug.LogError("EmotionController not found in the scene. Make sure it exists!");
             }
-            else emotionController.PlayEmotion();
+            else
+            {
+                emotionController.SyncAnimationsWithWordTimings(wordTimings);
+                emotionController.PlayEmotion();
+            }
             
             // Update animation based on emotion code
             UpdateAnimation(messageContent);
@@ -396,6 +370,45 @@ public class TTSManager : MonoBehaviour
         public string text { get; set; }
         public string model_id { get; set; }
         public VoiceSettings voice_settings { get; set; }
+    }
+    
+    [Serializable]
+    public class ElevenLabsResponse
+    {
+        [JsonProperty("audio_base64")]
+        public string AudioBase64 { get; set; }
+
+        [JsonProperty("alignment")]
+        public Alignment Alignment { get; set; }
+
+        [JsonProperty("normalized_alignment")]
+        public Alignment NormalizedAlignment { get; set; }
+    }
+    
+    [Serializable]
+    public class Alignment
+    {
+        [JsonProperty("characters")]
+        public List<string> Characters { get; set; }
+
+        [JsonProperty("character_start_times_seconds")]
+        public List<float> CharacterStartTimesSeconds { get; set; }
+
+        [JsonProperty("character_end_times_seconds")]
+        public List<float> CharacterEndTimesSeconds { get; set; }
+    }
+
+    [Serializable]
+    public class WordTiming
+    {
+        [JsonProperty("word")]
+        public string Word { get; set; }
+
+        [JsonProperty("start")]
+        public float StartTime { get; set; }
+
+        [JsonProperty("end")]
+        public float EndTime { get; set; }
     }
 
     [Serializable]

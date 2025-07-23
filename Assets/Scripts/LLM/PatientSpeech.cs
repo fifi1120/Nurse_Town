@@ -19,10 +19,14 @@ public class OpenAIRequest : MonoBehaviour
     public string apiKey;
     public string currentScenario = "brocaAphasia"; // New scenario selector
     private string currentPatientResponse = "";
+    public string lostResponse = "I......I.........no.........fast......";
+    public float maxSpeechSpeed = 170f;
     private CharacterAnimationController animationController;
     private BloodEffectController bloodEffectController;
     private ScoringSystem scoringSystem = new ScoringSystem(); // For scoring system
     private EmotionController emotionController;
+    private float currentSpeechSpeed;
+
     private string basePath;
     private List<string> patientInstructionsList;
     private List<Dictionary<string, string>> chatMessages;
@@ -121,15 +125,18 @@ public class OpenAIRequest : MonoBehaviour
         StartCoroutine(PostRequest());
     }
 
-    public void ReceiveNurseTranscription(string transcribedText)
+    public void ReceiveNurseTranscription(string transcribedText, float speechWpm)
     {
-        NurseResponds(transcribedText);
+        NurseResponds(transcribedText, speechWpm);
     }
 
-    private void NurseResponds(string nurseMessage)
+    private void NurseResponds(string nurseMessage, float speechWpm)
     {
         chatMessages.Add(new Dictionary<string, string>() { { "role", "user" }, { "content", nurseMessage } });
         PrintChatMessage(chatMessages);
+        currentSpeechSpeed = speechWpm;
+        Debug.Log("speech speed:" + currentSpeechSpeed);
+
         StartCoroutine(PostRequest());
 
         // Evaluate nurse's response
@@ -140,6 +147,12 @@ public class OpenAIRequest : MonoBehaviour
     IEnumerator PostRequest()
     {
         Debug.Log("Building request body for chat completion...");
+
+        if (currentSpeechSpeed > maxSpeechSpeed)
+        {
+            HandlePatientResponse(lostResponse, 5);
+            yield break;
+        }
 
         string requestBody = BuildRequestBody();
         var request = CreateRequest(requestBody);
@@ -155,24 +168,33 @@ public class OpenAIRequest : MonoBehaviour
         {
             var jsonResponse = JObject.Parse(request.downloadHandler.text);
             var messageContent = jsonResponse["choices"][0]["message"]["content"].ToString();
-            currentPatientResponse = messageContent;
 
-            chatMessages.Add(new Dictionary<string, string>() { { "role", "assistant" }, { "content", messageContent } });
-            PrintChatMessage(chatMessages);
-
-            // Play the response using TTS
-            if (TTSManager.Instance != null)
-            {
-                TTSManager.Instance.ConvertTextToSpeech(messageContent);
-            }
-            else
-            {
-                Debug.LogError("TTSManager instance not found.");
-            }
-            
             var match = Regex.Match(messageContent, @"\[(\d+)\]");
             if (!match.Success || emotionController == null) yield break;
             int emotionCode = int.Parse(match.Groups[1].Value);
+
+            HandlePatientResponse(messageContent, emotionCode);
+        }
+    }
+
+    private void HandlePatientResponse(string responseText, int emotionCode)
+    {
+        currentPatientResponse = responseText; // for scoring
+
+        chatMessages.Add(new Dictionary<string, string>() { { "role", "assistant" }, { "content", responseText } });
+        PrintChatMessage(chatMessages);
+
+        if (TTSManager.Instance != null)
+        {
+            TTSManager.Instance.ConvertTextToSpeech(responseText);
+        }
+        else
+        {
+            Debug.LogError("TTSManager instance not found.");
+        }
+
+        if (emotionController != null)
+        {
             emotionController.HandleEmotionCode(emotionCode);
         }
     }

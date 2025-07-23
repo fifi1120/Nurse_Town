@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -7,24 +7,23 @@ using UnityEngine.Networking;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-public class ScoringSystem
+public class ScoringSystem : MonoBehaviour
 {
     public int totalScore = 5;
     public int interactionCount = 0;
 
-    // to store reasons for adding / deducting points
+    // Store reasons for adding / deducting points
     private List<string> pointsAddedReasons = new List<string>();
     private List<string> pointsDeductedReasons = new List<string>();
 
     public void EvaluateNurseResponse(string nurseResponse)
     {
-        // use OpenAIRequest.Instance 
-        OpenAIRequest.Instance.StartCoroutine(EvaluateResponseCoroutine(nurseResponse));
+        // Use OpenAIRequest.Instance 
+        StartCoroutine(EvaluateResponseCoroutine(nurseResponse));
     }
 
     private IEnumerator EvaluateResponseCoroutine(string nurseResponse)
     {
-
         string prompt = $"You are an expert nursing instructor. Evaluate the following nurse's response based on the criteria provided. Provide a JSON object with the evaluation results.\n\n" +
                         $"Nurse's Response: \"{nurseResponse}\"\n\n" +
                         "Scoring Criteria:\n" +
@@ -38,7 +37,7 @@ public class ScoringSystem
                         "  \"reason\": \"<detailed explanation of what the nurse did well or could improve>\"\n" +
                         "}";
 
-        // create OpenAI request
+        // Create OpenAI request
         var requestBody = new
         {
             model = "gpt-4",
@@ -60,7 +59,7 @@ public class ScoringSystem
 
         yield return request.SendWebRequest();
 
-        interactionCount++; 
+        interactionCount++;
 
         if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
         {
@@ -69,11 +68,9 @@ public class ScoringSystem
         }
         else
         {
-            
             var jsonResponse = JObject.Parse(request.downloadHandler.text);
             var responseContent = jsonResponse["choices"][0]["message"]["content"].ToString();
 
-            
             try
             {
                 var evaluationResult = JsonConvert.DeserializeObject<EvaluationResult>(responseContent);
@@ -83,7 +80,6 @@ public class ScoringSystem
 
                 totalScore += pointsAdded - pointsDeducted;
 
-                
                 if (pointsAdded > 0)
                 {
                     pointsAddedReasons.Add(reason);
@@ -99,7 +95,6 @@ public class ScoringSystem
                     Debug.Log("Good! Keep going!");
                 }
 
-                
                 Debug.Log($"This was your {interactionCount} response.");
 
             }
@@ -109,10 +104,20 @@ public class ScoringSystem
             }
         }
 
-        // if the round of conversation >= 5, generate report
+        // Check if report can be viewed
+        CheckReportAvailability();
+    }
+
+    private void CheckReportAvailability()
+    {
         if (interactionCount >= 5)
         {
-            GenerateReport();
+            Debug.Log("Sufficient conversations completed, you can now press Enter to view the report!");
+        }
+        else
+        {
+            int remaining = 5 - interactionCount;
+            Debug.Log($"{remaining} more conversations needed to view the report");
         }
     }
 
@@ -121,14 +126,12 @@ public class ScoringSystem
         Debug.Log("===== Evaluation Report =====");
         Debug.Log($"Total Score: {totalScore}");
 
-        
         Debug.Log("Things you did well:");
         foreach (var reason in pointsAddedReasons)
         {
             Debug.Log("- " + reason);
         }
 
-        
         Debug.Log("Things you could improve:");
         foreach (var reason in pointsDeductedReasons)
         {
@@ -137,14 +140,65 @@ public class ScoringSystem
 
         Debug.Log("=============================");
 
-        // reset
+        // Reset
+        ResetScoring();
+    }
+
+    // ========== Public methods for clipboard usage ==========
+
+    public List<string> GetPointsAddedReasons()
+    {
+        return new List<string>(pointsAddedReasons);
+    }
+
+    public List<string> GetPointsDeductedReasons()
+    {
+        return new List<string>(pointsDeductedReasons);
+    }
+
+    public int GetCurrentScore()
+    {
+        return totalScore;
+    }
+
+    public int GetInteractionCount()
+    {
+        return interactionCount;
+    }
+
+    public bool CanViewReport()
+    {
+        return interactionCount >= 5;
+    }
+
+    // Reset scoring system
+    public void ResetScoring()
+    {
         totalScore = 5;
         pointsAddedReasons.Clear();
         pointsDeductedReasons.Clear();
         interactionCount = 0;
     }
-}
 
+    // Test method: Simulate completed conversation
+    [ContextMenu("Simulate Completed Conversation")]
+    public void SimulateCompletedConversation()
+    {
+        // Clear existing data first
+        pointsAddedReasons.Clear();
+        pointsDeductedReasons.Clear();
+
+        // Simulate some test data in English
+        pointsAddedReasons.Add("Used clear and understandable language to explain medical procedures to the patient");
+        pointsAddedReasons.Add("Mentioned the 0-10 pain scale to help patients better express their pain levels");
+        pointsDeductedReasons.Add("Used medical terminology such as 'angiography' without proper explanation");
+
+        totalScore = 8;
+        interactionCount = 5;
+
+        Debug.Log("Conversation simulation completed, you can now press Enter to view the report");
+    }
+}
 
 public class EvaluationResult
 {
